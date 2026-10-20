@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>UAT Request Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f3f5f4; --surface:#ffffff; --surface2:#f8faf9; --ink:#141a1b; --ink2:#4a5456; --muted:#7a8487;
+  --line:#dde2e0; --line2:#eaeeed; --accent:#1d5d70; --accent-ink:#ffffff; --accent-soft:#e3eef1;
+  --grid:#e6e9e8; --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b; --crit-ink:#b42525;
+  --st-new:#8a9396; --st-await:#e0a100; --st-prog:#4a3aa7; --st-done:#0ca30c; --st-rej:#5b6264;
+  --s1:#2a78d6; --s3:#1baf7a;
+  --shadow:0 1px 2px rgba(20,26,27,.06),0 4px 16px rgba(20,26,27,.05);
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
+  --bg:#0f1213; --surface:#181c1e; --surface2:#1d2224; --ink:#eef2f1; --ink2:#b5bfc0; --muted:#8a9497;
+  --line:#2c3437; --line2:#232a2c; --accent:#72b8cc; --accent-ink:#0f1213; --accent-soft:#1c3139;
+  --grid:#262c2e; --crit-ink:#ff7b7b; --st-new:#8a9497; --st-await:#c98500; --st-prog:#9085e9; --st-rej:#7c8587;
+  --s1:#3987e5; --s3:#199e70; --shadow:0 1px 2px rgba(0,0,0,.3);}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --bg:#0f1213; --surface:#181c1e; --surface2:#1d2224; --ink:#eef2f1; --ink2:#b5bfc0; --muted:#8a9497;
+  --line:#2c3437; --line2:#232a2c; --accent:#72b8cc; --accent-ink:#0f1213; --accent-soft:#1c3139;
+  --grid:#262c2e; --crit-ink:#ff7b7b; --st-new:#8a9497; --st-await:#c98500; --st-prog:#9085e9; --st-rej:#7c8587;
+  --s1:#3987e5; --s3:#199e70; --shadow:0 1px 2px rgba(0,0,0,.3);}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45}
+.wrap{max-width:1280px;margin:0 auto;padding:0 20px 48px}
+@media (max-width:600px){.wrap{padding-inline:16px}}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;padding:22px 0 14px}
+.brand h1{margin:0;font-size:22px;font-weight:700;letter-spacing:-.01em}
+.brand p{margin:2px 0 0;color:var(--ink2);font-size:13px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px}
+.tabs button{border:0;background:transparent;color:var(--ink2);font:600 13px var(--sans);padding:7px 14px;border-radius:7px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:16px}
+.fld{display:flex;flex-direction:column;gap:3px;min-width:0}
+.fld>span{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+select,input,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:6px 8px;min-width:0;max-width:100%}
+textarea{resize:vertical;width:100%}
+.filters select{min-width:130px}
+.btn{font:600 13px var(--sans);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:7px;padding:7px 12px;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--surface2)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.danger{color:var(--crit-ink)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--ink2)}
+.banner{padding:10px 14px;border-radius:10px;margin-bottom:14px;font-size:13px;background:var(--accent-soft);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.summary{font-size:16px;margin:0 0 14px;color:var(--ink2)}
+.summary b{color:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px}
+@media (max-width:1000px){.kpis{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:520px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:left;cursor:pointer;font:inherit;color:inherit;display:flex;flex-direction:column;gap:2px;position:relative}
+.kpi:hover{border-color:var(--accent)}
+.kpi .lab{font-size:12px;font-weight:600;color:var(--ink2)}
+.kpi .val{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.kpi .sub{font-size:12px;color:var(--muted)}
+.kpi.alert .val{color:var(--crit-ink)}
+.kpi.alert::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:0 3px 3px 0;background:var(--crit)}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(12,1fr)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.card h2{font-size:14px;font-weight:700;margin:0 0 2px}
+.card .hint{font-size:12px;color:var(--muted);margin:0 0 10px}
+.c12{grid-column:span 12}.c7{grid-column:span 7}.c5{grid-column:span 5}.c6{grid-column:span 6}
+@media (max-width:900px){.c7,.c5,.c6{grid-column:span 12}}
+.attn{border-color:color-mix(in srgb,var(--crit) 35%,var(--line))}
+.attn-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.attn-cols{grid-template-columns:1fr}}
+.attn h3{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);margin:0 0 6px}
+.item{display:block;width:100%;text-align:left;font:inherit;color:inherit;background:var(--surface2);border:1px solid var(--line2);border-radius:9px;padding:9px 11px;margin-bottom:8px;cursor:pointer}
+.item:hover{border-color:var(--accent)}
+.item .t{font-weight:600}
+.item .n{font-size:13px;color:var(--ink2);margin-top:2px}
+.item .m{font-size:12px;color:var(--muted);margin-top:4px;display:flex;flex-wrap:wrap;gap:4px 10px}
+.empty{color:var(--muted);font-size:13px;padding:6px 0}
+.id{font-family:var(--mono);font-size:12px;color:var(--ink2)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--c) 14%,var(--surface));color:var(--ink);white-space:nowrap}
+.chip::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c);flex:none}
+.flag{display:inline-flex;font-size:11px;font-weight:700;padding:1px 7px;border-radius:5px;white-space:nowrap}
+.flag.od{background:color-mix(in srgb,var(--crit) 15%,var(--surface));color:var(--crit-ink)}
+.flag.st{background:color-mix(in srgb,var(--warn) 22%,var(--surface));color:var(--ink)}
+.bars{display:flex;flex-direction:column;gap:7px}
+.bar-row{display:grid;grid-template-columns:150px 1fr 34px;gap:10px;align-items:center;font-size:13px;cursor:pointer;background:none;border:0;padding:0;color:inherit;font-family:inherit;text-align:left}
+@media (max-width:520px){.bar-row{grid-template-columns:120px 1fr 28px}}
+.track{height:14px;border-radius:4px;background:var(--line2);overflow:hidden}
+.fill{height:100%;border-radius:0 4px 4px 0;background:var(--c)}
+.bar-row .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.prio{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.prio button{font:inherit;color:inherit;text-align:left;background:var(--surface2);border:1px solid var(--line2);border-radius:9px;padding:8px 10px;cursor:pointer}
+.prio .v{font-size:22px;font-weight:700}
+.prio .s{font-size:11px;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink2);margin-bottom:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.chart svg{display:block;width:100%;height:auto}
+.chart text{fill:var(--muted);font:11px var(--sans)}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{background:var(--surface2);text-align:left;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
+th:hover{color:var(--ink)}
+td{padding:8px 10px;border-bottom:1px solid var(--line2);vertical-align:top}
+tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--surface2)}
+td.title{min-width:240px;max-width:340px}
+td.title a{color:var(--ink);font-weight:600;text-decoration:none;cursor:pointer}
+td.title a:hover{text-decoration:underline}
+td .sub{font-size:12px;color:var(--muted)}
+td select{font-size:12px;padding:4px 6px}
+td.na{min-width:200px;max-width:280px;font-size:12px;color:var(--ink2)}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:12px}
+.toolbar .grow{flex:1 1 220px}
+.toolbar .grow input{width:100%}
+.count{font-size:13px;color:var(--ink2);margin:0 0 8px}
+.drawer-bg{position:fixed;inset:0;background:rgba(10,14,15,.35);z-index:20}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(640px,100%);background:var(--surface);z-index:21;box-shadow:-8px 0 30px rgba(0,0,0,.18);display:flex;flex-direction:column}
+.drawer header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px 12px;border-bottom:1px solid var(--line)}
+.drawer header h2{margin:0;font-size:16px}
+.drawer .body{overflow-y:auto;padding:16px 18px 30px;display:flex;flex-direction:column;gap:14px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}
+.form .full{grid-column:1/-1}
+@media (max-width:520px){.form{grid-template-columns:1fr}}
+.form label{display:flex;flex-direction:column;gap:3px;font-size:12px;font-weight:600;color:var(--ink2)}
+.form input,.form select{width:100%}
+.sect{font-size:12px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;color:var(--muted);margin:6px 0 0;border-top:1px solid var(--line2);padding-top:12px}
+.timeline{list-style:none;margin:0;padding:0}
+.timeline li{display:grid;grid-template-columns:92px 1fr;gap:10px;padding:8px 0;border-bottom:1px solid var(--line2);font-size:13px}
+.timeline .when{font-family:var(--mono);font-size:11px;color:var(--muted);padding-top:2px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:9px;font-size:13px;z-index:40;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+.note{font-size:12px;color:var(--muted);margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>UAT Request Tracker</h1>
+      <p>Customer requests raised during User Acceptance Testing</p>
+    </div>
+    <div class="row">
+      <button class="btn primary" id="hdrNew">+ New request</button>
+      <nav class="tabs" role="tablist">
+        <button role="tab" data-tab="overview" aria-selected="true">Management overview</button>
+        <button role="tab" data-tab="register" aria-selected="false">Request register</button>
+      </nav>
+    </div>
+  </header>
+
+  <div id="notice"></div>
+
+  <section class="filters" aria-label="Filters">
+    <label class="fld"><span>Project</span><select id="fProject"></select></label>
+    <label class="fld"><span>Department</span><select id="fCustomer"></select></label>
+    <label class="fld"><span>Priority</span><select id="fPriority"></select></label>
+    <label class="fld"><span>Status</span><select id="fStatus"></select></label>
+    <button class="btn ghost" id="fReset">Clear filters</button>
+  </section>
+
+  <main id="view-overview"></main>
+  <main id="view-register" hidden></main>
+
+  <p class="note">Data is saved in this browser only. To share updates, use <b>Export CSV</b> in the Request register and send the file. Others load it with <b>Import CSV</b>.</p>
+</div>
+<div id="drawerHost"></div>
+<datalist id="dlOwners"></datalist><datalist id="dlCustomers"></datalist><datalist id="dlProjects"></datalist>
+<input type="file" id="csvFile" accept=".csv,text/csv" hidden>
+
+<script>
+(() => {
+"use strict";
+const STATUSES = ["To Do","In Progress","Completed","Need to Discuss","Rejected"];
+const STATUS_VAR = {"To Do":"--st-new","In Progress":"--st-prog","Completed":"--st-done","Need to Discuss":"--st-await","Rejected":"--st-rej"};
+const CATEGORIES = ["Bug","New Feature","Change Request","Clarification","Training"];
+const PRIORITIES = ["Critical","High","Medium","Low"];
+const PRIO_VAR = {"Critical":"--crit","High":"--serious","Medium":"--warn","Low":"--st-new"};
+const CLOSED = new Set(["Completed","Rejected"]);
+const FIELDS = ["id","raised","customer","raisedBy","project","title","description","category","priority","owner","status","target","nextAction","links","updated"];
+const LABEL = {id:"ID",raised:"Date raised",customer:"Department",raisedBy:"Raised by",project:"Project",title:"Title",description:"Description",category:"Category",priority:"Priority",owner:"Owner",status:"Status",target:"Target date",nextAction:"Next action",links:"Links",updated:"Last updated"};
+const STORE_KEY = "uatTracker.v1";
+const STALE_DAYS = 7;
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const today = () => new Date().toISOString().slice(0,10);
+const daysBetween = (a,b) => Math.round((new Date(b) - new Date(a)) / 864e5);
+const addDays = (d,n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x.toISOString().slice(0,10); };
+
+/* ---------- storage ---------- */
+let state = { requests: [], sample: false, seq: 0 };
+function load(){
+  try { const raw = localStorage.getItem(STORE_KEY); if (raw) { state = JSON.parse(raw); return; } } catch(e){}
+  state = { requests: sampleData(), sample: true, seq: 8 };
+}
+function save(){ try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch(e){ toast("Could not save in this browser"); } }
+function nextId(){ state.seq = (state.seq||0) + 1; return "UAT-" + String(state.seq).padStart(3,"0"); }
+
+function sampleData(){
+  const t = today(); const h = (d,txt) => ({when:addDays(t,-d), text:txt});
+  return [
+    {id:"UAT-001",raised:addDays(t,-20),customer:"Finance",raisedBy:"Sara A.",project:"Customer Portal",title:"Installment schedule shows wrong due date",description:"Due dates shift by one day for some contracts.",category:"Bug",priority:"Critical",owner:"Ahmed",status:"In Progress",target:addDays(t,-2),nextAction:"Fix timezone handling and redeploy to UAT",links:"",updated:addDays(t,-3),history:[h(20,"Created"),h(3,"Status → In Progress")]},
+    {id:"UAT-002",raised:addDays(t,-18),customer:"Operations",raisedBy:"Omar K.",project:"Back Office",title:"Export merchant report to Excel",description:"Need Excel export on merchant settlement report.",category:"New Feature",priority:"Medium",owner:"Mona",status:"Need to Discuss",target:addDays(t,10),nextAction:"Confirm required columns with Operations",links:"",updated:addDays(t,-12),history:[h(18,"Created"),h(12,"Status → Need to Discuss")]},
+    {id:"UAT-003",raised:addDays(t,-15),customer:"Risk",raisedBy:"Nour H.",project:"Customer Portal",title:"Credit limit field not editable",description:"",category:"Bug",priority:"High",owner:"Ahmed",status:"Completed",target:addDays(t,-5),nextAction:"",links:"",updated:addDays(t,-6),history:[h(15,"Created"),h(6,"Status → Completed")]},
+    {id:"UAT-004",raised:addDays(t,-12),customer:"Customer Service",raisedBy:"Laila M.",project:"Mobile App",title:"OTP screen text unclear in Arabic",description:"",category:"Change Request",priority:"Low",owner:"Youssef",status:"To Do",target:addDays(t,7),nextAction:"Get approved wording",links:"",updated:addDays(t,-12),history:[h(12,"Created")]},
+    {id:"UAT-005",raised:addDays(t,-9),customer:"Finance",raisedBy:"Sara A.",project:"Back Office",title:"Late fee calculation rounding",description:"",category:"Bug",priority:"High",owner:"Mona",status:"In Progress",target:addDays(t,3),nextAction:"Unit tests for rounding rules",links:"",updated:addDays(t,-1),history:[h(9,"Created"),h(1,"Status → In Progress")]},
+    {id:"UAT-006",raised:addDays(t,-6),customer:"Operations",raisedBy:"Omar K.",project:"Mobile App",title:"How to reverse a payment?",description:"",category:"Clarification",priority:"Medium",owner:"Youssef",status:"Completed",target:addDays(t,-1),nextAction:"",links:"",updated:addDays(t,-2),history:[h(6,"Created"),h(2,"Status → Completed")]},
+    {id:"UAT-007",raised:addDays(t,-4),customer:"Risk",raisedBy:"Nour H.",project:"Customer Portal",title:"Add blacklist check on signup",description:"",category:"New Feature",priority:"Critical",owner:"",status:"To Do",target:addDays(t,5),nextAction:"Assign owner",links:"",updated:addDays(t,-4),history:[h(4,"Created")]},
+    {id:"UAT-008",raised:addDays(t,-2),customer:"Customer Service",raisedBy:"Laila M.",project:"Back Office",title:"Duplicate customer records",description:"",category:"Bug",priority:"Medium",owner:"Ahmed",status:"Rejected",target:"",nextAction:"",links:"",updated:addDays(t,-1),history:[h(2,"Created"),h(1,"Status → Rejected (works as designed)")]},
+  ];
+}
+
+/* ---------- derived ---------- */
+const isOpen = r => !CLOSED.has(r.status);
+const isOverdue = r => isOpen(r) && r.target && r.target < today();
+const isStale = r => isOpen(r) && r.updated && daysBetween(r.updated, today()) >= STALE_DAYS;
+
+let filters = { project:"", customer:"", priority:"", status:"" };
+let regView = { q:"", sort:"raised", dir:-1, quick:"" };
+function filtered(){
+  return state.requests.filter(r =>
+    (!filters.project || r.project === filters.project) &&
+    (!filters.customer || r.customer === filters.customer) &&
+    (!filters.priority || r.priority === filters.priority) &&
+    (!filters.status || r.status === filters.status));
+}
+const uniq = k => [...new Set(state.requests.map(r => r[k]).filter(Boolean))].sort();
+
+function fillSelect(el, label, opts, val){
+  el.innerHTML = `<option value="">All ${label}</option>` + opts.map(o => `<option${o===val?" selected":""}>${esc(o)}</option>`).join("");
+}
+function renderFilters(){
+  fillSelect($("#fProject"),"projects",uniq("project"),filters.project);
+  fillSelect($("#fCustomer"),"departments",uniq("customer"),filters.customer);
+  fillSelect($("#fPriority"),"priorities",PRIORITIES,filters.priority);
+  fillSelect($("#fStatus"),"statuses",STATUSES,filters.status);
+  $("#dlOwners").innerHTML = uniq("owner").map(o=>`<option value="${esc(o)}">`).join("");
+  $("#dlCustomers").innerHTML = uniq("customer").map(o=>`<option value="${esc(o)}">`).join("");
+  $("#dlProjects").innerHTML = uniq("project").map(o=>`<option value="${esc(o)}">`).join("");
+}
+const chip = (txt, v) => `<span class="chip" style="--c:var(${v})">${esc(txt)}</span>`;
+const flags = r => (isOverdue(r)?`<span class="flag od">OVERDUE</span>`:"") + (isStale(r)?`<span class="flag st">STALE</span>`:"");
+
+/* ---------- overview ---------- */
+function renderOverview(){
+  const rs = filtered(), open = rs.filter(isOpen), od = rs.filter(isOverdue), st = rs.filter(isStale);
+  const done = rs.filter(r => r.status==="Completed").length;
+  const discuss = rs.filter(r => r.status==="Need to Discuss").length;
+  const critOpen = open.filter(r => r.priority==="Critical").length;
+  const unassigned = open.filter(r => !r.owner).length;
+  const pct = rs.length ? Math.round(done / rs.length * 100) : 0;
+
+  const banner = state.sample ? `<div class="banner"><span>You're looking at <b>sample data</b>. Clear it to start your own tracker, or import a CSV.</span><span class="row"><button class="btn" data-act="import">Import CSV</button><button class="btn primary" data-act="clearSample">Clear sample data</button></span></div>` : "";
+  $("#notice").innerHTML = banner;
+
+  const kpi = (lab,val,sub,quick,alert) => `<button class="kpi${alert&&val?" alert":""}" data-quick="${quick}"><span class="lab">${lab}</span><span class="val">${val}</span><span class="sub">${sub}</span></button>`;
+  const statusCounts = STATUSES.map(s => [s, rs.filter(r=>r.status===s).length]);
+  const maxS = Math.max(1, ...statusCounts.map(x=>x[1]));
+  const attnItem = r => `<button class="item" data-open="${esc(r.id)}"><div class="t"><span class="id">${esc(r.id)}</span> ${esc(r.title)}</div>${r.nextAction?`<div class="n">Next: ${esc(r.nextAction)}</div>`:""}<div class="m">${chip(r.priority,PRIO_VAR[r.priority])}<span>${esc(r.owner||"Unassigned")}</span>${r.target?`<span>Due ${esc(r.target)}</span>`:""}${flags(r)}</div></button>`;
+  const prioOrder = (a,b) => PRIORITIES.indexOf(a.priority) - PRIORITIES.indexOf(b.priority);
+
+  $("#view-overview").innerHTML = `
+    <p class="summary"><b>${rs.length}</b> requests, <b>${open.length}</b> open, <b>${pct}%</b> completed. ${od.length?`<b style="color:var(--crit-ink)">${od.length} overdue</b>.`:"Nothing overdue."}</p>
+    <div class="kpis">
+      ${kpi("Total requests",rs.length,"in current filter","all")}
+      ${kpi("Open",open.length,"not completed or rejected","open")}
+      ${kpi("Overdue",od.length,"past target date","overdue",true)}
+      ${kpi("Critical open",critOpen,"priority = Critical","critical",true)}
+      ${kpi("Need to discuss",discuss,"waiting on a decision","discuss")}
+      ${kpi("Unassigned",unassigned,"open with no owner","unassigned",true)}
+    </div>
+    <div class="grid">
+      <section class="card attn c12">
+        <h2>Needs attention</h2><p class="hint">Overdue, stale (no update in ${STALE_DAYS}+ days) or critical open requests</p>
+        <div class="attn-cols">
+          <div><h3>Overdue &amp; critical</h3>${[...new Set([...od, ...open.filter(r=>r.priority==="Critical")])].sort(prioOrder).slice(0,6).map(attnItem).join("")||`<div class="empty">Nothing here 🎉</div>`}</div>
+          <div><h3>Stale</h3>${st.sort(prioOrder).slice(0,6).map(attnItem).join("")||`<div class="empty">Everything has been updated recently.</div>`}</div>
+        </div>
+      </section>
+      <section class="card c5">
+        <h2>By status</h2><p class="hint">Click a bar to open the register filtered</p>
+        <div class="bars">${statusCounts.map(([s,n])=>`<button class="bar-row" data-fstatus="${esc(s)}"><span>${chip(s,STATUS_VAR[s])}</span><span class="track"><span class="fill" style="display:block;width:${n/maxS*100}%;--c:var(${STATUS_VAR[s]})"></span></span><span class="num">${n}</span></button>`).join("")}</div>
+        <div class="prio">${PRIORITIES.map(p=>{const n=open.filter(r=>r.priority===p).length;return `<button data-fprio="${p}"><div class="v">${n}</div><div class="s">${p} open</div></button>`}).join("")}</div>
+      </section>
+      <section class="card c7">
+        <h2>Raised vs completed</h2><p class="hint">Requests per week, last 8 weeks</p>
+        <div class="legend"><span><i style="background:var(--s1)"></i>Raised</span><span><i style="background:var(--s3)"></i>Completed</span></div>
+        <div class="chart">${weeklyChart(rs)}</div>
+      </section>
+      <section class="card c6">
+        <h2>Open by department</h2><p class="hint">Who is raising the open work</p>
+        ${groupBars(open,"customer")}
+      </section>
+      <section class="card c6">
+        <h2>Open by owner</h2><p class="hint">Workload across the team</p>
+        ${groupBars(open,"owner","Unassigned")}
+      </section>
+    </div>`;
+}
+function groupBars(list,key,blank="—"){
+  const m = {}; list.forEach(r => { const k = r[key]||blank; m[k]=(m[k]||0)+1; });
+  const rows = Object.entries(m).sort((a,b)=>b[1]-a[1]); if(!rows.length) return `<div class="empty">No open requests.</div>`;
+  const max = rows[0][1];
+  return `<div class="bars">${rows.map(([k,n])=>`<div class="bar-row" style="cursor:default"><span>${esc(k)}</span><span class="track"><span class="fill" style="display:block;width:${n/max*100}%;--c:var(--accent)"></span></span><span class="num">${n}</span></div>`).join("")}</div>`;
+}
+function weeklyChart(rs){
+  const W=640,H=200,P={l:28,r:8,t:10,b:24}, weeks=8;
+  const end = new Date(today()); const buckets=[];
+  for(let i=weeks-1;i>=0;i--){ const s=new Date(end); s.setDate(s.getDate()-i*7-6); const e=new Date(end); e.setDate(e.getDate()-i*7);
+    const si=s.toISOString().slice(0,10), ei=e.toISOString().slice(0,10);
+    buckets.push({label:si.slice(5), raised:rs.filter(r=>r.raised>=si&&r.raised<=ei).length,
+      done:rs.filter(r=>r.status==="Completed"&&r.updated>=si&&r.updated<=ei).length}); }
+  const max=Math.max(2,...buckets.map(b=>Math.max(b.raised,b.done)));
+  const iw=W-P.l-P.r, ih=H-P.t-P.b, bw=iw/weeks, y=v=>P.t+ih-v/max*ih;
+  let g=""; for(let k=0;k<=4;k++){const v=Math.round(max*k/4), yy=y(v); g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${yy}" y2="${yy}" stroke="var(--grid)"/><text x="${P.l-6}" y="${yy+4}" text-anchor="end">${v}</text>`;}
+  const bars=buckets.map((b,i)=>{const x=P.l+i*bw+bw*.18, w=bw*.3;
+    return `<rect x="${x}" y="${y(b.raised)}" width="${w}" height="${P.t+ih-y(b.raised)}" rx="2" fill="var(--s1)"><title>${b.label}: ${b.raised} raised</title></rect>
+    <rect x="${x+w+2}" y="${y(b.done)}" width="${w}" height="${P.t+ih-y(b.done)}" rx="2" fill="var(--s3)"><title>${b.label}: ${b.done} completed</title></rect>
+    <text x="${P.l+i*bw+bw/2}" y="${H-6}" text-anchor="middle">${b.label}</text>`}).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Weekly raised vs completed">${g}${bars}</svg>`;
+}
+
+/* ---------- register ---------- */
+function renderRegister(){
+  let rs = filtered();
+  const q = regView.q.trim().toLowerCase();
+  if(q) rs = rs.filter(r => [r.id,r.title,r.description,r.owner,r.customer,r.project,r.nextAction,r.raisedBy].join(" ").toLowerCase().includes(q));
+  const quick = {open:isOpen, overdue:isOverdue, critical:r=>isOpen(r)&&r.priority==="Critical", discuss:r=>r.status==="Need to Discuss", unassigned:r=>isOpen(r)&&!r.owner, stale:isStale}[regView.quick];
+  if(quick) rs = rs.filter(quick);
+  const k = regView.sort, d = regView.dir;
+  const rank = {priority:r=>PRIORITIES.indexOf(r.priority), status:r=>STATUSES.indexOf(r.status)};
+  rs.sort((a,b)=>{ const va = rank[k]?rank[k](a):(a[k]||""), vb = rank[k]?rank[k](b):(b[k]||""); return (va>vb?1:va<vb?-1:0)*d; });
+  const cols = [["id","ID"],["title","Request"],["customer","Department"],["priority","Priority"],["status","Status"],["owner","Owner"],["target","Target"],["nextAction","Next action"]];
+  const arrow = c => regView.sort===c ? (regView.dir>0?" ▲":" ▼") : "";
+  $("#view-register").innerHTML = `
+    <div class="toolbar">
+      <label class="fld grow"><span>Search</span><input id="rq" type="search" placeholder="Title, owner, ID…" value="${esc(regView.q)}"></label>
+      <label class="fld"><span>Quick view</span><select id="rquick">
+        ${[["","Everything"],["open","Open"],["overdue","Overdue"],["critical","Critical open"],["discuss","Need to discuss"],["unassigned","Unassigned"],["stale","Stale"]].map(([v,l])=>`<option value="${v}"${v===regView.quick?" selected":""}>${l}</option>`).join("")}
+      </select></label>
+      <button class="btn primary" data-act="new">+ New request</button>
+      <button class="btn" data-act="export">Export CSV</button>
+      <button class="btn" data-act="import">Import CSV</button>
+    </div>
+    <p class="count">${rs.length} request${rs.length===1?"":"s"}</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr>${cols.map(([c,l])=>`<th data-sort="${c}">${l}${arrow(c)}</th>`).join("")}</tr></thead>
+      <tbody>${rs.map(r=>`<tr>
+        <td class="id">${esc(r.id)}</td>
+        <td class="title"><a data-open="${esc(r.id)}">${esc(r.title)}</a><div class="sub">${esc(r.project)} · ${esc(r.category)} · raised ${esc(r.raised)}</div><div>${flags(r)}</div></td>
+        <td>${esc(r.customer)}</td>
+        <td>${chip(r.priority,PRIO_VAR[r.priority])}</td>
+        <td><select data-inline="status" data-id="${esc(r.id)}">${STATUSES.map(s=>`<option${s===r.status?" selected":""}>${s}</option>`).join("")}</select></td>
+        <td>${esc(r.owner||"—")}</td>
+        <td class="tabular">${esc(r.target||"—")}</td>
+        <td class="na">${esc(r.nextAction||"")}</td>
+      </tr>`).join("") || `<tr><td colspan="8" class="empty">No requests match.</td></tr>`}</tbody>
+    </table></div>`;
+}
+
+/* ---------- drawer ---------- */
+function openDrawer(id){
+  const isNew = !id;
+  const r = isNew ? {id:"",raised:today(),customer:"",raisedBy:"",project:"",title:"",description:"",category:"Bug",priority:"Medium",owner:"",status:"To Do",target:"",nextAction:"",links:"",history:[]} : state.requests.find(x=>x.id===id);
+  if(!r) return;
+  const opt = (list,v) => list.map(o=>`<option${o===v?" selected":""}>${o}</option>`).join("");
+  const links = (r.links||"").split(/\s+/).filter(Boolean);
+  $("#drawerHost").innerHTML = `<div class="drawer-bg" data-act="close"></div>
+  <aside class="drawer" role="dialog" aria-modal="true" aria-label="Request details">
+    <header><h2>${isNew?"New request":`<span class="id">${esc(r.id)}</span> ${esc(r.title)}`}</h2><button class="btn ghost" data-act="close" aria-label="Close">✕</button></header>
+    <div class="body">
+      <form class="form" id="reqForm">
+        <label class="full">Title *<input name="title" required value="${esc(r.title)}"></label>
+        <label class="full">Description<textarea name="description" rows="3">${esc(r.description)}</textarea></label>
+        <label>Project<input name="project" list="dlProjects" value="${esc(r.project)}"></label>
+        <label>Department<input name="customer" list="dlCustomers" value="${esc(r.customer)}"></label>
+        <label>Raised by<input name="raisedBy" value="${esc(r.raisedBy)}"></label>
+        <label>Date raised<input type="date" name="raised" value="${esc(r.raised)}"></label>
+        <label>Category<select name="category">${opt(CATEGORIES,r.category)}</select></label>
+        <label>Priority<select name="priority">${opt(PRIORITIES,r.priority)}</select></label>
+        <label>Status<select name="status">${opt(STATUSES,r.status)}</select></label>
+        <label>Owner<input name="owner" list="dlOwners" value="${esc(r.owner)}"></label>
+        <label>Target date<input type="date" name="target" value="${esc(r.target)}"></label>
+        <label class="full">Next action<input name="nextAction" value="${esc(r.nextAction)}"></label>
+        <label class="full">Links (space separated)<input name="links" value="${esc(r.links)}"></label>
+        <label class="full">Add a note to history<input name="note" placeholder="Optional"></label>
+        <div class="full row"><button class="btn primary" type="submit">${isNew?"Create request":"Save changes"}</button><button class="btn" type="button" data-act="close">Cancel</button>${isNew?"":`<span style="flex:1"></span><button class="btn danger" type="button" data-act="delete" data-id="${esc(r.id)}">Delete</button>`}</div>
+      </form>
+      ${links.length?`<div><div class="sect">Links</div>${links.map(l=>`<div><a href="${esc(l)}" target="_blank" rel="noopener" style="color:var(--accent);word-break:break-all">${esc(l)}</a></div>`).join("")}</div>`:""}
+      ${isNew?"":`<div><div class="sect">History</div><ul class="timeline">${(r.history||[]).slice().reverse().map(h=>`<li><span class="when">${esc(h.when)}</span><span>${esc(h.text)}</span></li>`).join("")||`<li><span></span><span class="empty">No history</span></li>`}</ul></div>`}
+    </div>
+  </aside>`;
+  const f = $("#reqForm");
+  f.title.focus();
+  f.addEventListener("submit", e => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(f).entries());
+    const note = data.note.trim(); delete data.note;
+    if(isNew){
+      const rec = {...r, ...data, id:nextId(), updated:today(), history:[{when:today(),text:"Created"}]};
+      if(note) rec.history.push({when:today(),text:note});
+      state.requests.push(rec); toast(`${rec.id} created`);
+    } else {
+      const changes = ["status","priority","owner","target"].filter(k=>(r[k]||"")!==(data[k]||"")).map(k=>`${LABEL[k]} → ${data[k]||"—"}`);
+      Object.assign(r, data, {updated:today()});
+      r.history = r.history||[];
+      if(changes.length) r.history.push({when:today(),text:changes.join("; ")});
+      if(note) r.history.push({when:today(),text:note});
+      toast("Saved");
+    }
+    save(); closeDrawer(); renderAll();
+  });
+}
+function closeDrawer(){ $("#drawerHost").innerHTML = ""; }
+function clearSampleIfNeeded(){ if(state.sample){ state.requests=[]; state.seq=0; state.sample=false; } }
+
+/* ---------- CSV ---------- */
+function toCSV(){
+  const cols=[...FIELDS,"history"];
+  const cell = v => { const s=String(v??""); return /[",\n\r]/.test(s)?`"${s.replace(/"/g,'""')}"`:s; };
+  const rows = state.requests.map(r => cols.map(c => c==="history" ? cell((r.history||[]).map(h=>`${h.when}: ${h.text}`).join(" | ")) : cell(r[c])).join(","));
+  return "﻿" + [cols.map(c=>LABEL[c]||"History").join(","), ...rows].join("\r\n");
+}
+function parseCSV(text){
+  text = text.replace(/^﻿/,""); const rows=[]; let row=[], f="", q=false;
+  for(let i=0;i<text.length;i++){ const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){f+='"';i++;} else q=false; } else f+=c; }
+    else if(c==='"') q=true; else if(c===","){row.push(f);f="";}
+    else if(c==="\n"||c==="\r"){ if(c==="\r"&&text[i+1]==="\n") i++; row.push(f); rows.push(row); row=[]; f=""; }
+    else f+=c; }
+  if(f||row.length){row.push(f);rows.push(row);}
+  return rows.filter(r=>r.some(x=>x.trim()));
+}
+function importCSV(text){
+  const rows = parseCSV(text); if(rows.length<2){ toast("CSV has no rows"); return; }
+  const head = rows[0].map(h=>h.trim().toLowerCase());
+  const map = {}; [...FIELDS,"history"].forEach(k=>{ const lab=(LABEL[k]||"History").toLowerCase(); const i=head.findIndex(h=>h===lab||h===k.toLowerCase()); if(i>=0) map[k]=i; });
+  if(map.title===undefined){ toast("CSV needs a Title column"); return; }
+  clearSampleIfNeeded();
+  let added=0, updated=0;
+  rows.slice(1).forEach(cells=>{
+    const r={}; FIELDS.forEach(k=>{ if(map[k]!==undefined) r[k]=(cells[map[k]]||"").trim(); });
+    if(!r.title) return;
+    if(!STATUSES.includes(r.status)) r.status="To Do";
+    if(!PRIORITIES.includes(r.priority)) r.priority="Medium";
+    if(!CATEGORIES.includes(r.category)) r.category="Bug";
+    r.history = map.history!==undefined ? (cells[map.history]||"").split(" | ").filter(Boolean).map(s=>{const m=s.match(/^(\d{4}-\d{2}-\d{2}): (.*)$/);return m?{when:m[1],text:m[2]}:{when:"",text:s};}) : [];
+    const ex = r.id && state.requests.find(x=>x.id===r.id);
+    if(ex){ Object.assign(ex,r); updated++; }
+    else { r.id = r.id || nextId(); r.raised=r.raised||today(); r.updated=r.updated||today(); if(!r.history.length) r.history=[{when:today(),text:"Imported"}]; state.requests.push(r); added++; }
+    const n = parseInt((r.id||"").replace(/\D/g,""),10); if(n>state.seq) state.seq=n;
+  });
+  save(); renderAll(); toast(`Imported: ${added} new, ${updated} updated`);
+}
+function download(name, text){
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([text],{type:"text/csv;charset=utf-8"})); a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+
+/* ---------- misc ---------- */
+let toastT;
+function toast(msg){ clearTimeout(toastT); let t=$(".toast"); if(!t){t=document.createElement("div");t.className="toast";document.body.appendChild(t);} t.textContent=msg; toastT=setTimeout(()=>t.remove(),2600); }
+function setTab(tab){
+  document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected", String(b.dataset.tab===tab)));
+  $("#view-overview").hidden = tab!=="overview"; $("#view-register").hidden = tab!=="register";
+}
+function renderAll(){ renderFilters(); renderOverview(); renderRegister(); }
+
+/* ---------- events ---------- */
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-tab],[data-open],[data-act],[data-quick],[data-sort],[data-fstatus],[data-fprio]"); if(!t) return;
+  if(t.dataset.tab) setTab(t.dataset.tab);
+  else if(t.dataset.open) openDrawer(t.dataset.open);
+  else if(t.dataset.quick){ regView.quick = t.dataset.quick==="all"?"":t.dataset.quick; renderRegister(); setTab("register"); }
+  else if(t.dataset.fstatus){ filters.status=t.dataset.fstatus; renderAll(); setTab("register"); }
+  else if(t.dataset.fprio){ filters.priority=t.dataset.fprio; regView.quick="open"; renderAll(); setTab("register"); }
+  else if(t.dataset.sort){ const c=t.dataset.sort; regView.dir = regView.sort===c ? -regView.dir : 1; regView.sort=c; renderRegister(); }
+  else switch(t.dataset.act){
+    case "close": closeDrawer(); break;
+    case "new": openDrawer(); break;
+    case "export": download(`uat-requests-${today()}.csv`, toCSV()); break;
+    case "import": $("#csvFile").click(); break;
+    case "clearSample": if(confirm("Remove the sample requests?")){ state={requests:[],sample:false,seq:0}; save(); renderAll(); } break;
+    case "delete": if(confirm(`Delete ${t.dataset.id}?`)){ state.requests=state.requests.filter(r=>r.id!==t.dataset.id); save(); closeDrawer(); renderAll(); toast("Deleted"); } break;
+  }
+});
+document.addEventListener("change", e => {
+  const t=e.target;
+  if(t.dataset.inline==="status"){ const r=state.requests.find(x=>x.id===t.dataset.id); if(r){ r.status=t.value; r.updated=today(); (r.history=r.history||[]).push({when:today(),text:`Status → ${t.value}`}); save(); renderOverview(); renderFilters(); toast(`${r.id} → ${t.value}`);} }
+  else if(t.id==="rquick"){ regView.quick=t.value; renderRegister(); }
+  else if(["fProject","fCustomer","fPriority","fStatus"].includes(t.id)){
+    filters[{fProject:"project",fCustomer:"customer",fPriority:"priority",fStatus:"status"}[t.id]] = t.value; renderAll(); }
+});
+document.addEventListener("input", e => { if(e.target.id==="rq"){ regView.q=e.target.value; const pos=e.target.selectionStart; renderRegister(); const el=$("#rq"); el.focus(); el.setSelectionRange(pos,pos);} });
+document.addEventListener("keydown", e => { if(e.key==="Escape") closeDrawer(); });
+$("#fReset").addEventListener("click", ()=>{ filters={project:"",customer:"",priority:"",status:""}; regView.quick=""; regView.q=""; renderAll(); });
+$("#hdrNew").addEventListener("click", ()=>openDrawer());
+$("#csvFile").addEventListener("change", e => { const f=e.target.files[0]; if(!f) return; f.text().then(importCSV); e.target.value=""; });
+
+load(); renderAll();
+})();
+</script>
+</body>
+</html>
