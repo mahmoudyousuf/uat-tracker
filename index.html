@@ -1,9 +1,5 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>UAT Request Tracker</title>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>UAT Request Tracker (Copy)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -11,49 +7,54 @@
 :root{
   --bg:#f3f5f4; --surface:#ffffff; --surface2:#f8faf9; --ink:#141a1b; --ink2:#4a5456; --muted:#7a8487;
   --line:#dde2e0; --line2:#eaeeed; --accent:#1d5d70; --accent-ink:#ffffff; --accent-soft:#e3eef1;
-  --grid:#e6e9e8; --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b; --crit-ink:#b42525;
-  --st-new:#8a9396; --st-await:#e0a100; --st-prog:#4a3aa7; --st-done:#0ca30c; --st-rej:#5b6264;
-  --s1:#2a78d6; --s3:#1baf7a;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --closed:#c3c7c6; --grid:#e6e9e8; --axis:#c3c2b7;
+  --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b; --good-ink:#006300; --crit-ink:#b42525;
+  --st-new:#8a9396; --st-review:#2a78d6; --st-await:#e0a100; --st-approved:#1baf7a; --st-prog:#4a3aa7;
+  --st-retest:#e87ba4; --st-done:#0ca30c; --st-rej:#5b6264; --st-hold:#b8733a;
   --shadow:0 1px 2px rgba(20,26,27,.06),0 4px 16px rgba(20,26,27,.05);
   --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
-  color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
   --bg:#0f1213; --surface:#181c1e; --surface2:#1d2224; --ink:#eef2f1; --ink2:#b5bfc0; --muted:#8a9497;
   --line:#2c3437; --line2:#232a2c; --accent:#72b8cc; --accent-ink:#0f1213; --accent-soft:#1c3139;
-  --grid:#262c2e; --crit-ink:#ff7b7b; --st-new:#8a9497; --st-await:#c98500; --st-prog:#9085e9; --st-rej:#7c8587;
-  --s1:#3987e5; --s3:#199e70; --shadow:0 1px 2px rgba(0,0,0,.3);}}
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --closed:#4a5153; --grid:#262c2e; --axis:#3a4143;
+  --good-ink:#3cc23c; --crit-ink:#ff7b7b; --st-new:#8a9497; --st-review:#3987e5; --st-await:#c98500; --st-approved:#199e70;
+  --st-prog:#9085e9; --st-retest:#d55181; --st-done:#0ca30c; --st-rej:#7c8587; --st-hold:#c98a55;
+  --shadow:0 1px 2px rgba(0,0,0,.3);}}
 :root[data-theme="dark"]{color-scheme:dark;
   --bg:#0f1213; --surface:#181c1e; --surface2:#1d2224; --ink:#eef2f1; --ink2:#b5bfc0; --muted:#8a9497;
   --line:#2c3437; --line2:#232a2c; --accent:#72b8cc; --accent-ink:#0f1213; --accent-soft:#1c3139;
-  --grid:#262c2e; --crit-ink:#ff7b7b; --st-new:#8a9497; --st-await:#c98500; --st-prog:#9085e9; --st-rej:#7c8587;
-  --s1:#3987e5; --s3:#199e70; --shadow:0 1px 2px rgba(0,0,0,.3);}
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --closed:#4a5153; --grid:#262c2e; --axis:#3a4143;
+  --good-ink:#3cc23c; --crit-ink:#ff7b7b; --st-new:#8a9497; --st-review:#3987e5; --st-await:#c98500; --st-approved:#199e70;
+  --st-prog:#9085e9; --st-retest:#d55181; --st-done:#0ca30c; --st-rej:#7c8587; --st-hold:#c98a55;
+  --shadow:0 1px 2px rgba(0,0,0,.3);}
 *{box-sizing:border-box}
-html,body{margin:0;padding:0}
 body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45}
-.wrap{max-width:1280px;margin:0 auto;padding:0 20px 48px}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:20px;padding-block:0 48px}
 @media (max-width:600px){.wrap{padding-inline:16px}}
-header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;padding:22px 0 14px}
-.brand h1{margin:0;font-size:22px;font-weight:700;letter-spacing:-.01em}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;padding-block:22px 14px}
+.brand h1{margin:0;font-size:22px;font-weight:700;letter-spacing:-.01em;text-wrap:balance}
 .brand p{margin:2px 0 0;color:var(--ink2);font-size:13px}
-.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px}
 .tabs button{border:0;background:transparent;color:var(--ink2);font:600 13px var(--sans);padding:7px 14px;border-radius:7px;cursor:pointer}
 .tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
-button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tabs button:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .filters{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:16px}
 .fld{display:flex;flex-direction:column;gap:3px;min-width:0}
 .fld>span{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
 select,input,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:6px 8px;min-width:0;max-width:100%}
 textarea{resize:vertical;width:100%}
 .filters select{min-width:130px}
+.filters input[type=date]{width:140px}
 .btn{font:600 13px var(--sans);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:7px;padding:7px 12px;cursor:pointer;white-space:nowrap}
 .btn:hover{background:var(--surface2)}
 .btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.btn.danger{color:var(--crit-ink)}
+.btn.danger{color:var(--crit-ink);border-color:color-mix(in srgb,var(--crit) 40%,var(--line))}
 .btn.ghost{border-color:transparent;background:transparent;color:var(--ink2)}
-.banner{padding:10px 14px;border-radius:10px;margin-bottom:14px;font-size:13px;background:var(--accent-soft);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
-.summary{font-size:16px;margin:0 0 14px;color:var(--ink2)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.banner{padding:10px 14px;border-radius:10px;margin-bottom:14px;font-size:13px;border:1px solid var(--line);background:var(--surface)}
+.banner.sample{background:var(--accent-soft);border-color:transparent}
+.summary{font-size:16px;margin:0 0 14px;color:var(--ink2);text-wrap:pretty}
 .summary b{color:var(--ink)}
 .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px}
 @media (max-width:1000px){.kpis{grid-template-columns:repeat(3,1fr)}}
@@ -69,12 +70,12 @@ textarea{resize:vertical;width:100%}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
 .card h2{font-size:14px;font-weight:700;margin:0 0 2px}
 .card .hint{font-size:12px;color:var(--muted);margin:0 0 10px}
-.c12{grid-column:span 12}.c7{grid-column:span 7}.c5{grid-column:span 5}.c6{grid-column:span 6}
-@media (max-width:900px){.c7,.c5,.c6{grid-column:span 12}}
+.c12{grid-column:span 12}.c7{grid-column:span 7}.c5{grid-column:span 5}.c6{grid-column:span 6}.c4{grid-column:span 4}.c8{grid-column:span 8}
+@media (max-width:900px){.c7,.c5,.c6,.c4,.c8{grid-column:span 12}}
 .attn{border-color:color-mix(in srgb,var(--crit) 35%,var(--line))}
 .attn-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media (max-width:760px){.attn-cols{grid-template-columns:1fr}}
-.attn h3{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);margin:0 0 6px}
+.attn h3{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);margin:0 0 6px;display:flex;align-items:center;gap:6px}
 .item{display:block;width:100%;text-align:left;font:inherit;color:inherit;background:var(--surface2);border:1px solid var(--line2);border-radius:9px;padding:9px 11px;margin-bottom:8px;cursor:pointer}
 .item:hover{border-color:var(--accent)}
 .item .t{font-weight:600}
@@ -84,27 +85,37 @@ textarea{resize:vertical;width:100%}
 .id{font-family:var(--mono);font-size:12px;color:var(--ink2)}
 .chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--c) 14%,var(--surface));color:var(--ink);white-space:nowrap}
 .chip::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c);flex:none}
-.flag{display:inline-flex;font-size:11px;font-weight:700;padding:1px 7px;border-radius:5px;white-space:nowrap}
+.flag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:1px 7px;border-radius:5px;white-space:nowrap;letter-spacing:.02em}
 .flag.od{background:color-mix(in srgb,var(--crit) 15%,var(--surface));color:var(--crit-ink)}
 .flag.st{background:color-mix(in srgb,var(--warn) 22%,var(--surface));color:var(--ink)}
+.flag.bl{background:var(--crit);color:#fff}
+.flag.dc{background:color-mix(in srgb,var(--st-prog) 18%,var(--surface));color:var(--ink)}
 .bars{display:flex;flex-direction:column;gap:7px}
-.bar-row{display:grid;grid-template-columns:150px 1fr 34px;gap:10px;align-items:center;font-size:13px;cursor:pointer;background:none;border:0;padding:0;color:inherit;font-family:inherit;text-align:left}
-@media (max-width:520px){.bar-row{grid-template-columns:120px 1fr 28px}}
+.bar-row{display:grid;grid-template-columns:184px 1fr 34px;gap:10px;align-items:center;font-size:13px;cursor:pointer;border-radius:6px}
+.bar-row:hover .track{outline:1px solid var(--line)}
+@media (max-width:520px){.bar-row{grid-template-columns:160px 1fr 28px}}
 .track{height:14px;border-radius:4px;background:var(--line2);overflow:hidden}
 .fill{height:100%;border-radius:0 4px 4px 0;background:var(--c)}
 .bar-row .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
 .prio{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
 .prio button{font:inherit;color:inherit;text-align:left;background:var(--surface2);border:1px solid var(--line2);border-radius:9px;padding:8px 10px;cursor:pointer}
+.prio button:hover{border-color:var(--accent)}
 .prio .v{font-size:22px;font-weight:700}
 .prio .s{font-size:11px;color:var(--muted)}
 .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink2);margin-bottom:6px}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
-.chart svg{display:block;width:100%;height:auto}
+.legend i.ln{height:3px;border-radius:2px;vertical-align:3px;width:14px}
+.chart{position:relative;width:100%}
+.chart svg{display:block;width:100%;overflow:visible}
 .chart text{fill:var(--muted);font:11px var(--sans)}
+.tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:8px;padding:8px 10px;font-size:12px;min-width:150px;z-index:5}
+.tip b{display:block;margin-bottom:4px}
+.tip div{display:flex;justify-content:space-between;gap:12px}
+.tip div span:last-child{font-variant-numeric:tabular-nums;font-weight:600}
 .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 table{border-collapse:collapse;width:100%;font-size:13px}
-th{background:var(--surface2);text-align:left;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
-th:hover{color:var(--ink)}
+th{position:sticky;top:0;background:var(--surface2);text-align:left;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
+th[data-sort]:hover{color:var(--ink)}
 td{padding:8px 10px;border-bottom:1px solid var(--line2);vertical-align:top}
 tr:last-child td{border-bottom:0}
 tbody tr:hover{background:var(--surface2)}
@@ -112,49 +123,62 @@ td.title{min-width:240px;max-width:340px}
 td.title a{color:var(--ink);font-weight:600;text-decoration:none;cursor:pointer}
 td.title a:hover{text-decoration:underline}
 td .sub{font-size:12px;color:var(--muted)}
-td select{font-size:12px;padding:4px 6px}
+td select,td input{font-size:12px;padding:4px 6px}
+td input[type=date]{width:128px}
+td input.owner{width:130px}
 td.na{min-width:200px;max-width:280px;font-size:12px;color:var(--ink2)}
+.tabular{font-variant-numeric:tabular-nums}
 .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:12px}
 .toolbar .grow{flex:1 1 220px}
 .toolbar .grow input{width:100%}
 .count{font-size:13px;color:var(--ink2);margin:0 0 8px}
 .drawer-bg{position:fixed;inset:0;background:rgba(10,14,15,.35);z-index:20}
 .drawer{position:fixed;top:0;right:0;bottom:0;width:min(640px,100%);background:var(--surface);z-index:21;box-shadow:-8px 0 30px rgba(0,0,0,.18);display:flex;flex-direction:column}
-.drawer header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px 12px;border-bottom:1px solid var(--line)}
+.drawer header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(14px + env(safe-area-inset-top,0px)) 18px 12px;border-bottom:1px solid var(--line)}
 .drawer header h2{margin:0;font-size:16px}
 .drawer .body{overflow-y:auto;padding:16px 18px 30px;display:flex;flex-direction:column;gap:14px}
 .form{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}
 .form .full{grid-column:1/-1}
 @media (max-width:520px){.form{grid-template-columns:1fr}}
 .form label{display:flex;flex-direction:column;gap:3px;font-size:12px;font-weight:600;color:var(--ink2)}
+.form label.chk{flex-direction:row;align-items:center;gap:8px}
 .form input,.form select{width:100%}
 .sect{font-size:12px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;color:var(--muted);margin:6px 0 0;border-top:1px solid var(--line2);padding-top:12px}
-.timeline{list-style:none;margin:0;padding:0}
+.timeline{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .timeline li{display:grid;grid-template-columns:92px 1fr;gap:10px;padding:8px 0;border-bottom:1px solid var(--line2);font-size:13px}
 .timeline .when{font-family:var(--mono);font-size:11px;color:var(--muted);padding-top:2px}
-.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:9px;font-size:13px;z-index:40;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
-.note{font-size:12px;color:var(--muted);margin-top:18px}
+.timeline .who{font-size:12px;color:var(--muted)}
+.links a{color:var(--accent);word-break:break-all}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:9px;font-size:13px;z-index:40;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+.guide{max-width:880px}
+.guide h2{font-size:18px;margin:26px 0 8px}
+.guide h2:first-child{margin-top:0}
+.guide p,.guide li{color:var(--ink2);max-width:72ch}
+.guide table td,.guide table th{cursor:default}
+.guide code{font-family:var(--mono);font-size:12px;background:var(--surface2);border:1px solid var(--line2);padding:1px 5px;border-radius:4px}
+.muted{color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
-</head>
-<body>
+
 <div class="wrap">
   <header class="top">
     <div class="brand">
       <h1>UAT Request Tracker</h1>
-      <p>Customer requests raised during User Acceptance Testing</p>
+      <p id="asof">Customer requests raised during User Acceptance Testing</p>
     </div>
     <div class="row">
-      <button class="btn primary" id="hdrNew">+ New request</button>
-      <nav class="tabs" role="tablist">
-        <button role="tab" data-tab="overview" aria-selected="true">Management overview</button>
-        <button role="tab" data-tab="register" aria-selected="false">Request register</button>
-      </nav>
+    <button class="btn primary" id="hdrNew" hidden>+ New request</button>
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="overview" aria-selected="true">Management overview</button>
+      <button role="tab" data-tab="register" aria-selected="false">Request register</button>
+    </nav>
     </div>
   </header>
 
   <div id="notice"></div>
 
-  <section class="filters" aria-label="Filters">
+  <section class="filters" id="filters" aria-label="Filters">
     <label class="fld"><span>Project</span><select id="fProject"></select></label>
     <label class="fld"><span>Department</span><select id="fCustomer"></select></label>
     <label class="fld"><span>Priority</span><select id="fPriority"></select></label>
@@ -164,13 +188,49 @@ td.na{min-width:200px;max-width:280px;font-size:12px;color:var(--ink2)}
 
   <main id="view-overview"></main>
   <main id="view-register" hidden></main>
-
-  <p class="note">Data is saved in this browser only. To share updates, use <b>Export CSV</b> in the Request register and send the file. Others load it with <b>Import CSV</b>.</p>
+  <main id="view-guide" hidden></main>
 </div>
 <div id="drawerHost"></div>
 <datalist id="dlOwners"></datalist><datalist id="dlCustomers"></datalist><datalist id="dlProjects"></datalist>
 <input type="file" id="csvFile" accept=".csv,text/csv" hidden>
-
+<script type="application/json" id="uat-seed">{"requests":[{"id":"UAT-001","data":{"blocker":false,"category":"Change Request","completedAt":"2026-09-25","customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 2, original ID 1).","escalation":"","id":"UAT-001","lastUpdate":"2026-09-27T13:44:38","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"High","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"Completed","target":"","title":"إضافة خيار اللغة الإنجليزية في العنوان."}},{"id":"UAT-002","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 3, original ID 2).","escalation":"","id":"UAT-002","lastUpdate":"2026-09-27T12:59:59","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"Medium","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"Need to Discuss","target":"","title":"البطاقة تكون ضمن مرفق (Attachment) واحد."}},{"id":"UAT-003","data":{"blocker":false,"category":"Change Request","completedAt":"2026-09-25","customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 4, original ID 3).","escalation":"","id":"UAT-003","lastUpdate":"2026-09-27T13:44:47","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"High","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"Completed","target":"","title":"إضافة الاسم في البحث (Search) بجانب الرقم القومي لأن الـ ID يتغير للعملاء الأجانب."}},{"id":"UAT-004","data":{"blocker":false,"category":"Change Request","completedAt":"2026-09-25","customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 5, original ID 4).","escalation":"","id":"UAT-004","lastUpdate":"2026-09-27T13:44:49","links":[],"nextAction":"Need to discuss with the credit team","nextActionOwner":"","owner":"","priority":"High","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"Completed","target":"","title":"نقل بيانات شخص الاستدلال إلى مرحلة التعاقد بدلاً من إضافتها في بداية إنشاء العميل."}},{"id":"UAT-005","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 6, original ID 5).","escalation":"","id":"UAT-005","lastUpdate":"2026-09-25T17:30:00","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"Medium","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"Completed","target":"","title":"إضافة سنوات الصنع 2026 و2027 للسيارات."}},{"id":"UAT-006","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 7, original ID 6).","escalation":"","id":"UAT-006","lastUpdate":"2026-09-27T13:07:55","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"Medium","project":"Portal","raised":"2026-09-25","resolution":"Already done","sample":false,"status":"To Do","target":"","title":"إضافة اسم مسؤول المبيعات (Sales) في طلب التمويل / بيانات التمويل."}},{"id":"UAT-008","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 8, original ID 8).","escalation":"","id":"UAT-008","lastUpdate":"2026-09-27T13:08:30","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"Medium","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"To Do","target":"","title":"التحقق من بيانات العميل من خلال السجل المدني عند كل تعامل قبل إدخال ملف جديد."}},{"id":"UAT-010","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 9, original ID 10).","escalation":"","id":"UAT-010","lastUpdate":"2026-09-27T13:08:35","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"Medium","project":"Portal","raised":"2026-09-25","resolution":"Need to discuss","sample":false,"status":"Need to Discuss","target":"","title":"رفع مرفق واحد يشمل طلب التمويل (Application) والبطاقة."}},{"id":"UAT-011","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 10, original ID 11).","escalation":"","id":"UAT-011","lastUpdate":"2026-09-27T13:08:41","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"Medium","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"Need to Discuss","target":"","title":"إمكانية إضافة أكثر من طلب تمويل في نفس الوقت للدراسة والطباعة."}},{"id":"UAT-012","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 11, original ID 12).","escalation":"","id":"UAT-012","lastUpdate":"2026-09-27T13:45:26","links":[],"nextAction":"Will be shared across the sales manager","nextActionOwner":"","owner":"","priority":"High","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"In Progress","target":"","title":"عند رفض طلب التمويل، عرض جميع تفاصيل أسباب الرفض لإتاحة مناقشة إمكانية استكماله."}},{"id":"UAT-013","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 12, original ID 13).","escalation":"","id":"UAT-013","lastUpdate":"2026-09-27T13:09:05","links":[],"nextAction":"Need to discuss","nextActionOwner":"","owner":"","priority":"Medium","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"Need to Discuss","target":"","title":"إضافة خيار (أخرى) في قائمة التجار مع إمكانية إدخال اسم تاجر جديد قبل اكتمال التكويد."}},{"id":"UAT-014","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 13, original ID 14).","escalation":"","id":"UAT-014","lastUpdate":"2026-09-25T17:30:00","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"Medium","project":"Portal","raised":"2026-09-25","resolution":"Already done","sample":false,"status":"Completed","target":"","title":"جعل رقم الشاسيه ورقم الموتور اختياريين للسيارات الجديدة وإلزاميين للمستعملة."}},{"id":"UAT-015","data":{"blocker":false,"category":"Change Request","completedAt":"2026-09-27","customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 14, original ID 15).","escalation":"","id":"UAT-015","lastUpdate":"2026-09-27T15:33:28","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"Medium","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"Completed","target":"","title":"إمكانية رفع أكثر من مرفق وصورة في مرحلة تقييم وتسعير السيارات."}},{"id":"UAT-017","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 15, original ID 17).","escalation":"","id":"UAT-017","lastUpdate":"2026-09-27T13:11:57","links":[],"nextAction":"Need to discuss","nextActionOwner":"","owner":"","priority":"Medium","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"To Do","target":"","title":"إمكانية التكامل مع نظام التأمينات الاجتماعية للتحقق من وظيفة العميل والتأمينات."}},{"id":"UAT-018","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 16, original ID 18).","escalation":"","id":"UAT-018","lastUpdate":"2026-09-27T13:45:38","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"High","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"Completed","target":"","title":"بعد تقييم السيارة، إعادة الملف إلى الائتمان لإعادة الدراسة بناءً على التسعير الجديد مع توضيح قيمة المقدم والتمويل الجديد."}},{"id":"UAT-019","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 17, original ID 19).","escalation":"","id":"UAT-019","lastUpdate":"2026-09-27T13:12:18","links":[],"nextAction":"Need approval","nextActionOwner":"","owner":"","priority":"Medium","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"To Do","target":"","title":"إمكانية تعديل قيمة المصاريف الإدارية ومراجعتها قبل طباعة العقد."}},{"id":"UAT-020","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 18, original ID 20).","escalation":"","id":"UAT-020","lastUpdate":"2026-09-27T13:12:26","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"Medium","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"Need to Discuss","target":"","title":"رفع جميع مستندات التعاقد في مرفق واحد لتوفير الوقت والجهد."}},{"id":"UAT-021","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 19, no original ID).","escalation":"","id":"UAT-021","lastUpdate":"2026-09-27T13:45:54","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"High","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"Completed","target":"","title":"View the customers to the credit persona"}},{"id":"UAT-022","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 20, no original ID).","escalation":"","id":"UAT-022","lastUpdate":"2026-09-27T13:45:52","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"High","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"Completed","target":"","title":"view the tracking tab to the invistigation"}},{"id":"UAT-023","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 21, no original ID).","escalation":"","id":"UAT-023","lastUpdate":"2026-09-27T13:45:59","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"High","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"Completed","target":"","title":"The tracking should be across all the departments"}},{"id":"UAT-024","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 22, no original ID).","escalation":"","id":"UAT-024","lastUpdate":"2026-09-27T13:46:03","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"High","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"Completed","target":"","title":"العميل الاجنبي the fields should be editable"}},{"id":"UAT-025","data":{"blocker":false,"category":"Change Request","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 23, no original ID).","escalation":"","id":"UAT-025","lastUpdate":"2026-09-27T13:46:08","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"High","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"Completed","target":"","title":"Enable Sales Manager to View The Rejected Customers and Loan Requests"}},{"id":"UAT-026","data":{"blocker":false,"category":"New Feature","completedAt":"2026-09-27","customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 24, no original ID).","escalation":"","id":"UAT-026","lastUpdate":"2026-09-27T13:40:48","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"Medium","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"Completed","target":"","title":"Indicate Guarantor Availability During Sales Application"}},{"id":"UAT-027","data":{"blocker":false,"category":"New Feature","completedAt":"2026-09-25","customer":"Business users","decisionNeeded":false,"description":"Imported from 'Portal UAT Feedback Requirements' sheet (row 25, no original ID).","escalation":"","id":"UAT-027","lastUpdate":"2026-09-27T13:40:57","links":[],"nextAction":"","nextActionOwner":"","owner":"","priority":"Medium","project":"Portal","raised":"2026-09-25","resolution":"","sample":false,"status":"Completed","target":"","title":"Generate Guarantor Documents Based on Product (Cars-other products)"}},{"id":"UAT-028","data":{"blocker":false,"category":"New Feature","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"The Business User will have access to the reports relevant to their role","escalation":"","id":"UAT-028","lastUpdate":"2026-09-27T13:41:19","links":[],"nextAction":"","nextActionOwner":"","priority":"Medium","project":"Portal","raised":"2026-09-25","raisedBy":"","resolution":"","sample":false,"status":"In Progress","title":"Role-Based Access to Business Reports"}},{"id":"UAT-029","data":{"blocker":false,"category":"New Feature","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"The authorized Business User wants to view and extract contract-related data,\nso that they can use contract information for business, operational, financial, and analytical activities.","escalation":"","id":"UAT-029","lastUpdate":"2026-09-27T13:41:30","links":[],"nextAction":"","nextActionOwner":"","priority":"Medium","project":"Portal","raised":"2026-09-27","raisedBy":"","resolution":"","sample":false,"status":"In Progress","title":"Export Contracts Data Report"}},{"id":"UAT-030","data":{"blocker":false,"category":"New Feature","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"The authorized Business User will view and extract credit-related customer and contract information,\nso that they can support credit, financial, operational, and management activities.","escalation":"","id":"UAT-030","lastUpdate":"2026-09-27T13:58:13","links":[],"nextAction":"","nextActionOwner":"","priority":"Medium","project":"Portal","raised":"2026-09-27","raisedBy":"","resolution":"","sample":false,"status":"In Progress","title":"Export Credit Report"}},{"id":"UAT-031","data":{"blocker":false,"category":"New Feature","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"","escalation":"","id":"UAT-031","lastUpdate":"2026-09-27T13:59:31","links":[],"nextAction":"","nextActionOwner":"","priority":"Medium","project":"Portal","raised":"2026-09-27","raisedBy":"","resolution":"","sample":false,"status":"In Progress","title":"Export The Rejection Report (Operation)"}},{"id":"UAT-032","data":{"blocker":false,"category":"New Feature","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"","escalation":"","id":"UAT-032","lastUpdate":"2026-09-27T14:00:35","links":[],"nextAction":"","nextActionOwner":"","priority":"Medium","project":"Portal","raised":"2026-09-27","raisedBy":"","resolution":"","sample":false,"status":"In Progress","title":"Export The Contracts Tracking Report"}},{"id":"UAT-033","data":{"blocker":false,"category":"New Feature","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"","escalation":"","id":"UAT-033","lastUpdate":"2026-09-27T14:01:43","links":[],"nextAction":"","nextActionOwner":"","priority":"Medium","project":"Portal","raised":"2026-09-27","raisedBy":"","resolution":"","sample":false,"status":"To Do","title":"Add the Coordinator Persona With The Work Flow"}},{"id":"UAT-034","data":{"blocker":false,"category":"New Feature","completedAt":null,"customer":"Business users","decisionNeeded":false,"description":"Introduce a Compliance review stage for exception cases before they reach the final step. Exception cases will first be reviewed by a Compliance Maker, who evaluates the case and submits a recommendation. The case will then be reviewed by a Compliance Checker, who provides the final approval or rejection.","escalation":"","id":"UAT-034","lastUpdate":"2026-09-27T14:09:34","links":[],"nextAction":"","nextActionOwner":"","priority":"High","project":"Portal","raised":"2026-09-27","raisedBy":"","resolution":"","sample":false,"status":"In Progress","title":"Compliance Exception Review with Maker–Checker Workflow"}}],"history":[{"id":"083rk5ywocirc4s3lv0m","data":{"at":"2026-09-25T17:40:38","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"Ready for UAT Retest","requestId":"UAT-001","sample":false,"text":"","to":"Completed","type":"status"}},{"id":"2a504fsts8mi2qp2o7oj","data":{"at":"2026-09-27T13:07:57","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"Completed","requestId":"UAT-006","sample":false,"text":"","to":"To Do","type":"status"}},{"id":"3pygg2h6s3035a2y6vyt","data":{"at":"2026-09-27T13:46:08","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"priority","from":"Medium","requestId":"UAT-025","sample":false,"to":"High","type":"change"}},{"id":"4d2cjojm5cuw9irdyivr","data":{"at":"2026-09-27T13:41:10","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"category","from":"Clarification","requestId":"UAT-028","sample":false,"to":"New Feature","type":"change"}},{"id":"4eyz1t4soiyv6tg3jf85","data":{"at":"2026-09-27T13:14:42","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"In Progress","requestId":"UAT-026","sample":false,"text":"","to":"Completed","type":"status"}},{"id":"5rmru3rf0ko3bjfykw03","data":{"at":"2026-09-27T13:41:30","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"category","from":"Clarification","requestId":"UAT-029","sample":false,"to":"New Feature","type":"change"}},{"id":"6jp77uwt45x13iwjxh74","data":{"at":"2026-09-25T17:40:36","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"Completed","requestId":"UAT-001","sample":false,"text":"","to":"Ready for UAT Retest","type":"status"}},{"id":"7ac5rvfs446xb7kylpv5","data":{"at":"2026-09-27T14:00:35","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"requestId":"UAT-032","sample":false,"text":"Request raised","to":"In Progress","type":"created"}},{"id":"7c6103z48cqx37dzub2o","data":{"at":"2026-09-27T14:01:44","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"requestId":"UAT-033","sample":false,"text":"Request raised","to":"To Do","type":"created"}},{"id":"8ar7apqeeyvtnggxx4cy","data":{"at":"2026-09-27T14:09:34","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"requestId":"UAT-034","sample":false,"text":"Request raised","to":"In Progress","type":"created"}},{"id":"9dfsbz6eiogea6s653n4","data":{"at":"2026-09-27T13:44:49","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"priority","from":"Medium","requestId":"UAT-004","sample":false,"to":"High","type":"change"}},{"id":"UAT-001-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-001","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"Completed","type":"created"}},{"id":"UAT-002-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-002","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"Rejected","type":"created"}},{"id":"UAT-002-s02","data":{"at":"2026-09-25T19:00:00","byId":null,"byLabel":"Bulk update","from":"Rejected","requestId":"UAT-002","sample":false,"text":"All requests marked Completed","to":"Completed","type":"status"}},{"id":"UAT-003-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-003","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"New","type":"created"}},{"id":"UAT-004-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-004","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"New","type":"created"}},{"id":"UAT-005-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-005","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"Completed","type":"created"}},{"id":"UAT-006-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-006","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"Completed","type":"created"}},{"id":"UAT-008-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-008","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"New","type":"created"}},{"id":"UAT-008-s01","data":{"at":"2026-09-25T18:30:00","byId":null,"byLabel":"Status list update","from":"New","requestId":"UAT-008","sample":false,"text":"Status list changed to To Do / In Progress / Completed / Need to Discuss / Rejected","to":"To Do","type":"status"}},{"id":"UAT-008-s02","data":{"at":"2026-09-25T19:00:00","byId":null,"byLabel":"Bulk update","from":"To Do","requestId":"UAT-008","sample":false,"text":"All requests marked Completed","to":"Completed","type":"status"}},{"id":"UAT-010-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-010","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"Rejected","type":"created"}},{"id":"UAT-010-s02","data":{"at":"2026-09-25T19:00:00","byId":null,"byLabel":"Bulk update","from":"Rejected","requestId":"UAT-010","sample":false,"text":"All requests marked Completed","to":"Completed","type":"status"}},{"id":"UAT-011-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-011","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"New","type":"created"}},{"id":"UAT-011-s01","data":{"at":"2026-09-25T18:30:00","byId":null,"byLabel":"Status list update","from":"New","requestId":"UAT-011","sample":false,"text":"Status list changed to To Do / In Progress / Completed / Need to Discuss / Rejected","to":"To Do","type":"status"}},{"id":"UAT-011-s02","data":{"at":"2026-09-25T19:00:00","byId":null,"byLabel":"Bulk update","from":"To Do","requestId":"UAT-011","sample":false,"text":"All requests marked Completed","to":"Completed","type":"status"}},{"id":"UAT-012-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-012","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"New","type":"created"}},{"id":"UAT-012-s01","data":{"at":"2026-09-25T18:30:00","byId":null,"byLabel":"Status list update","from":"New","requestId":"UAT-012","sample":false,"text":"Status list changed to To Do / In Progress / Completed / Need to Discuss / Rejected","to":"To Do","type":"status"}},{"id":"UAT-012-s02","data":{"at":"2026-09-25T19:00:00","byId":null,"byLabel":"Bulk update","from":"To Do","requestId":"UAT-012","sample":false,"text":"All requests marked Completed","to":"Completed","type":"status"}},{"id":"UAT-013-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-013","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"New","type":"created"}},{"id":"UAT-013-s01","data":{"at":"2026-09-25T18:30:00","byId":null,"byLabel":"Status list update","from":"New","requestId":"UAT-013","sample":false,"text":"Status list changed to To Do / In Progress / Completed / Need to Discuss / Rejected","to":"Need to Discuss","type":"status"}},{"id":"UAT-013-s02","data":{"at":"2026-09-25T19:00:00","byId":null,"byLabel":"Bulk update","from":"Need to Discuss","requestId":"UAT-013","sample":false,"text":"All requests marked Completed","to":"Completed","type":"status"}},{"id":"UAT-014-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-014","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"Completed","type":"created"}},{"id":"UAT-015-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-015","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"Completed","type":"created"}},{"id":"UAT-017-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-017","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"New","type":"created"}},{"id":"UAT-017-s01","data":{"at":"2026-09-25T18:30:00","byId":null,"byLabel":"Status list update","from":"New","requestId":"UAT-017","sample":false,"text":"Status list changed to To Do / In Progress / Completed / Need to Discuss / Rejected","to":"Need to Discuss","type":"status"}},{"id":"UAT-017-s02","data":{"at":"2026-09-25T19:00:00","byId":null,"byLabel":"Bulk update","from":"Need to Discuss","requestId":"UAT-017","sample":false,"text":"All requests marked Completed","to":"Completed","type":"status"}},{"id":"UAT-018-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-018","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"Completed","type":"created"}},{"id":"UAT-019-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-019","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"New","type":"created"}},{"id":"UAT-019-s01","data":{"at":"2026-09-25T18:30:00","byId":null,"byLabel":"Status list update","from":"New","requestId":"UAT-019","sample":false,"text":"Status list changed to To Do / In Progress / Completed / Need to Discuss / Rejected","to":"To Do","type":"status"}},{"id":"UAT-019-s02","data":{"at":"2026-09-25T19:00:00","byId":null,"byLabel":"Bulk update","from":"To Do","requestId":"UAT-019","sample":false,"text":"All requests marked Completed","to":"Completed","type":"status"}},{"id":"UAT-020-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-020","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"Rejected","type":"created"}},{"id":"UAT-020-s02","data":{"at":"2026-09-25T19:00:00","byId":null,"byLabel":"Bulk update","from":"Rejected","requestId":"UAT-020","sample":false,"text":"All requests marked Completed","to":"Completed","type":"status"}},{"id":"UAT-021-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-021","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"Completed","type":"created"}},{"id":"UAT-022-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-022","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"Completed","type":"created"}},{"id":"UAT-023-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-023","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"Completed","type":"created"}},{"id":"UAT-024-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-024","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"Completed","type":"created"}},{"id":"UAT-025-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-025","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"Completed","type":"created"}},{"id":"UAT-026-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-026","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"New","type":"created"}},{"id":"UAT-026-s01","data":{"at":"2026-09-25T18:30:00","byId":null,"byLabel":"Status list update","from":"New","requestId":"UAT-026","sample":false,"text":"Status list changed to To Do / In Progress / Completed / Need to Discuss / Rejected","to":"To Do","type":"status"}},{"id":"UAT-026-s02","data":{"at":"2026-09-25T19:00:00","byId":null,"byLabel":"Bulk update","from":"To Do","requestId":"UAT-026","sample":false,"text":"All requests marked Completed","to":"Completed","type":"status"}},{"id":"UAT-027-e00","data":{"at":"2026-09-25T17:30:00","byId":null,"byLabel":"Imported from Portal UAT Feedback sheet","requestId":"UAT-027","sample":false,"text":"Imported from Portal UAT Feedback sheet","to":"New","type":"created"}},{"id":"UAT-027-s01","data":{"at":"2026-09-25T18:30:00","byId":null,"byLabel":"Status list update","from":"New","requestId":"UAT-027","sample":false,"text":"Status list changed to To Do / In Progress / Completed / Need to Discuss / Rejected","to":"To Do","type":"status"}},{"id":"UAT-027-s02","data":{"at":"2026-09-25T19:00:00","byId":null,"byLabel":"Bulk update","from":"To Do","requestId":"UAT-027","sample":false,"text":"All requests marked Completed","to":"Completed","type":"status"}},{"id":"cek2bbv80rv0iv8tgczr","data":{"at":"2026-09-27T13:45:54","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"priority","from":"Medium","requestId":"UAT-021","sample":false,"to":"High","type":"change"}},{"id":"d7x7cy4bl8bymdk2fcpv","data":{"at":"2026-09-27T13:11:58","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"Completed","requestId":"UAT-017","sample":false,"text":"","to":"To Do","type":"status"}},{"id":"ef8j5ya6dr2z4i3lxwba","data":{"at":"2026-09-27T13:08:57","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"To Do","requestId":"UAT-012","sample":false,"text":"","to":"In Progress","type":"status"}},{"id":"fd7uopnknrkv39jezhjm","data":{"at":"2026-09-27T13:45:26","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"priority","from":"Medium","requestId":"UAT-012","sample":false,"to":"High","type":"change"}},{"id":"fdb59qtniup306hx4ero","data":{"at":"2026-09-27T13:08:30","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"Completed","requestId":"UAT-008","sample":false,"text":"","to":"To Do","type":"status"}},{"id":"ftvit9g7qkmd61ypsdeq","data":{"at":"2026-09-27T13:40:48","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"category","from":"Change Request","requestId":"UAT-026","sample":false,"to":"New Feature","type":"change"}},{"id":"g96my8nqgbg3d1v9p938","data":{"at":"2026-09-27T13:14:39","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"Completed","requestId":"UAT-026","sample":false,"text":"","to":"In Progress","type":"status"}},{"id":"gjb8oxypw6lxcpiakcae","data":{"at":"2026-09-27T13:58:14","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"requestId":"UAT-030","sample":false,"text":"Request raised","to":"In Progress","type":"created"}},{"id":"hulxprgjtpccu19ejvuv","data":{"at":"2026-09-27T13:11:06","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"Completed","requestId":"UAT-015","sample":false,"text":"","to":"In Progress","type":"status"}},{"id":"hzudqlf9b56l04bahc3v","data":{"at":"2026-09-27T15:33:28","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"In Progress","requestId":"UAT-015","sample":false,"text":"","to":"Completed","type":"status"}},{"id":"iilrqdxu5q4rxmminxkq","data":{"at":"2026-09-27T13:45:52","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"priority","from":"Medium","requestId":"UAT-022","sample":false,"to":"High","type":"change"}},{"id":"ilrtk9qp3f14pujrnx6n","data":{"at":"2026-09-27T13:32:39","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"title","from":"Add documrnt","requestId":"UAT-028","sample":false,"to":"Role-Based Access to Business Reports","type":"change"}},{"id":"j8gso57a1a9l211p81v4","data":{"at":"2026-09-27T13:12:27","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"Completed","requestId":"UAT-020","sample":false,"text":"","to":"Need to Discuss","type":"status"}},{"id":"k06abfo7zny4c7ovy8kf","data":{"at":"2026-09-27T13:35:55","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"To Do","requestId":"UAT-029","sample":false,"text":"","to":"In Progress","type":"status"}},{"id":"k6ntxrmquwq0hrr1ugv1","data":{"at":"2026-09-27T13:40:57","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"category","from":"Change Request","requestId":"UAT-027","sample":false,"to":"New Feature","type":"change"}},{"id":"ki81xjgr054d47966bqp","data":{"at":"2026-09-27T13:44:47","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"priority","from":"Medium","requestId":"UAT-003","sample":false,"to":"High","type":"change"}},{"id":"kowqcq545e9oekuysct8","data":{"at":"2026-09-27T13:32:39","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"description","from":"","requestId":"UAT-028","sample":false,"to":"The Business User will have access to the reports relevant to their role","type":"change"}},{"id":"lgvy572dlurontqt2xnb","data":{"at":"2026-09-27T13:08:35","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"Completed","requestId":"UAT-010","sample":false,"text":"","to":"Need to Discuss","type":"status"}},{"id":"n33xg2q14ucjiv22aoek","data":{"at":"2026-09-25T17:42:50","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"New","requestId":"UAT-004","sample":false,"text":"","to":"Completed","type":"status"}},{"id":"o7h8x9umox235zdjpofs","data":{"at":"2026-09-25T18:01:29","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"requestId":"UAT-028","sample":false,"text":"Request raised","to":"In Progress","type":"created"}},{"id":"p6j3g9qch4m5az8vz35f","data":{"at":"2026-09-27T13:46:00","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"priority","from":"Medium","requestId":"UAT-023","sample":false,"to":"High","type":"change"}},{"id":"paa3qola6hp0ubvgn5ny","data":{"at":"2026-09-27T13:41:20","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"priority","from":"High","requestId":"UAT-028","sample":false,"to":"Medium","type":"change"}},{"id":"qtbusqctkgow37paigrm","data":{"at":"2026-09-27T13:35:31","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"requestId":"UAT-029","sample":false,"text":"Request raised","to":"To Do","type":"created"}},{"id":"r0si660y2b5tuxn0ub1f","data":{"at":"2026-09-27T13:44:38","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"priority","from":"Medium","requestId":"UAT-001","sample":false,"to":"High","type":"change"}},{"id":"sf1jz3mql0xvpq2qaiga","data":{"at":"2026-09-27T13:32:40","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"priority","from":"Critical","requestId":"UAT-028","sample":false,"to":"High","type":"change"}},{"id":"sjiioarx6twr84epyul3","data":{"at":"2026-09-27T13:09:05","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"Completed","requestId":"UAT-013","sample":false,"text":"","to":"Need to Discuss","type":"status"}},{"id":"ugxd4qqxuysd64qaoaei","data":{"at":"2026-09-27T13:12:19","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"Completed","requestId":"UAT-019","sample":false,"text":"","to":"To Do","type":"status"}},{"id":"uuod6992wxp4efzoopnf","data":{"at":"2026-09-27T13:45:38","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"priority","from":"Medium","requestId":"UAT-018","sample":false,"to":"High","type":"change"}},{"id":"wg7jiw487aizjb9je3xn","data":{"at":"2026-09-27T13:08:41","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"Completed","requestId":"UAT-011","sample":false,"text":"","to":"Need to Discuss","type":"status"}},{"id":"x1ye54rfuqmw6ugg1lof","data":{"at":"2026-09-27T12:59:59","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"Completed","requestId":"UAT-002","sample":false,"text":"","to":"Need to Discuss","type":"status"}},{"id":"xbtjssf7r0mat83h046y","data":{"at":"2026-09-27T13:46:04","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"field":"priority","from":"Medium","requestId":"UAT-024","sample":false,"to":"High","type":"change"}},{"id":"zbidnk90523kqxlzbp7v","data":{"at":"2026-09-27T13:59:31","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"requestId":"UAT-031","sample":false,"text":"Request raised","to":"In Progress","type":"created"}},{"id":"zymj0ozl52mycojcija9","data":{"at":"2026-09-27T13:08:54","byId":"u_dyphGEhVdo4vSGwvU_HrXg","byLabel":null,"from":"Completed","requestId":"UAT-012","sample":false,"text":"","to":"To Do","type":"status"}}],"settings":null}</script>
+<script>
+/* Standalone storage layer: replaces the claude.ai data service with this browser's localStorage.
+   Seeded with the tracker's data exported on 2026-10-20. */
+(function(){
+  var KEY = "uatTracker.standalone.v1";
+  var seed = JSON.parse(document.getElementById("uat-seed").textContent);
+  function fresh(){ var s = {requests:{}, history:{}, config:{}}; seed.requests.forEach(function(d){ s.requests[d.id] = d.data; }); seed.history.forEach(function(d){ s.history[d.id] = d.data; }); if (seed.settings) s.config.settings = seed.settings; return s; }
+  var mem = null;
+  function load(){ try { var raw = localStorage.getItem(KEY); if (raw) return JSON.parse(raw); } catch(e){} return fresh(); }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(mem)); } catch(e){} }
+  mem = load(); save();
+  var subs = [];
+  function colSnap(name){ var c = mem[name] || {}; return { docs: Object.keys(c).map(function(id){ var v = c[id]; return { id: id, exists: true, data: function(){ return JSON.parse(JSON.stringify(v)); } }; }) }; }
+  function docSnap(col, id){ var c = mem[col] || {}; var v = c[id]; return { id: id, exists: v !== undefined, data: function(){ return v === undefined ? undefined : JSON.parse(JSON.stringify(v)); } }; }
+  function notify(){ subs.forEach(function(s){ try { s.cb(s.kind === "col" ? colSnap(s.name) : docSnap(s.col, s.id)); } catch(e){ console.error(e); } }); }
+  function split(path){ var p = path.split("/"); return [p[0], p.slice(1).join("/")]; }
+  function rid(){ return Math.random().toString(36).slice(2, 12) + Date.now().toString(36); }
+  var db = {
+    collection: function(name){ return {
+      onSnapshot: function(cb){ var s = {kind:"col", name:name, cb:cb}; subs.push(s); setTimeout(function(){ cb(colSnap(name)); }, 0); return function(){ subs = subs.filter(function(x){ return x !== s; }); }; },
+      add: function(data){ var id = rid(); (mem[name] = mem[name] || {})[id] = JSON.parse(JSON.stringify(data)); save(); setTimeout(notify, 0); return Promise.resolve({ id: id }); },
+      doc: function(id){ return db.doc(name + "/" + id); }
+    }; },
+    doc: function(path){ var sp = split(path), col = sp[0], id = sp[1]; return {
+      onSnapshot: function(cb){ var s = {kind:"doc", col:col, id:id, cb:cb}; subs.push(s); setTimeout(function(){ cb(docSnap(col, id)); }, 0); return function(){ subs = subs.filter(function(x){ return x !== s; }); }; },
+      set: function(data){ (mem[col] = mem[col] || {})[id] = JSON.parse(JSON.stringify(data)); save(); setTimeout(notify, 0); return Promise.resolve(); },
+      update: function(data){ var c = (mem[col] = mem[col] || {}); var cur = c[id] || {}; Object.keys(data).forEach(function(k){ var v = data[k]; if (v && typeof v === "object" && v.__delete__) delete cur[k]; else cur[k] = JSON.parse(JSON.stringify(v === undefined ? null : v)); }); c[id] = cur; save(); setTimeout(notify, 0); return Promise.resolve(); },
+      delete: function(){ if (mem[col]) delete mem[col][id]; save(); setTimeout(notify, 0); return Promise.resolve(); },
+      get: function(){ return Promise.resolve(docSnap(col, id)); }
+    }; }
+  };
+  window.addEventListener("storage", function(e){ if (e.key === KEY) { mem = load(); notify(); } });
+  var user = { id: function(){ return Promise.resolve(null); }, can: function(){ return Promise.resolve(true); }, profiles: function(){ return Promise.resolve({}); } };
+  var downloads = { save: function(o){ var blob = o.data instanceof Blob ? o.data : new Blob([o.data], {type: /\.csv$/i.test(o.filename) ? "text/csv;charset=utf-8" : "application/octet-stream"}); var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = o.filename || "download"; document.body.appendChild(a); HTMLAnchorElement.prototype.click.call(a); a.remove(); setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000); return Promise.resolve(); } };
+  window.claude = { use: function(n){ return Promise.resolve(n === "db" ? db : n === "user" ? user : n === "downloads" ? downloads : null); } };
+})();
+</script>
 <script>
 (() => {
 "use strict";
@@ -180,328 +240,683 @@ const CATEGORIES = ["Bug","New Feature","Change Request","Clarification","Traini
 const PRIORITIES = ["Critical","High","Medium","Low"];
 const PRIO_VAR = {"Critical":"--crit","High":"--serious","Medium":"--warn","Low":"--st-new"};
 const CLOSED = new Set(["Completed","Rejected"]);
-const FIELDS = ["id","raised","customer","raisedBy","project","title","description","category","priority","owner","status","target","nextAction","links","updated"];
-const LABEL = {id:"ID",raised:"Date raised",customer:"Department",raisedBy:"Raised by",project:"Project",title:"Title",description:"Description",category:"Category",priority:"Priority",owner:"Owner",status:"Status",target:"Target date",nextAction:"Next action",links:"Links",updated:"Last updated"};
-const STORE_KEY = "uatTracker.v1";
-const STALE_DAYS = 7;
+const AWAIT_CUSTOMER = new Set(["Need to Discuss"]);
+const AWAIT_INTERNAL = new Set(["To Do","In Progress"]);
+const FIELD_LABEL = {raised:"Date raised",customer:"Department",raisedBy:"Raised by",project:"Project",title:"Title",description:"Description",category:"Category",priority:"Priority",owner:"Owner",status:"Status",target:"Target date",nextAction:"Next action",nextActionOwner:"Next action owner",resolution:"Resolution",links:"Links",blocker:"Blocker",decisionNeeded:"Management decision needed",escalation:"Escalation note"};
 
-const $ = s => document.querySelector(s);
+const S = { reqs:new Map(), hist:[], histBy:new Map(), settings:{staleDays:7}, loaded:{r:false,h:false},
+  db:null, user:null, me:null, canWrite:null, readOnly:false, downloads:null, names:{},
+  view:"overview", sort:{key:"id",dir:1}, reg:{q:"",status:"",category:"",flag:""} };
+
+const $ = (s, r=document) => r.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const today = () => new Date().toISOString().slice(0,10);
-const daysBetween = (a,b) => Math.round((new Date(b) - new Date(a)) / 864e5);
-const addDays = (d,n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x.toISOString().slice(0,10); };
+const pad = n => String(n).padStart(2,"0");
+const ymd = d => d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const today = () => ymd(new Date());
+const parseD = s => { const [y,m,d] = String(s).slice(0,10).split("-").map(Number); return new Date(y, (m||1)-1, d||1); };
+const addDays = (s, n) => { const d = parseD(s); d.setDate(d.getDate()+n); return ymd(d); };
+const daysBetween = (a, b) => Math.round((parseD(b) - parseD(a)) / 86400000);
+const monday = s => { const d = parseD(s); const w = (d.getDay()+6)%7; d.setDate(d.getDate()-w); return ymd(d); };
+const nowIso = () => { const d = new Date(); return ymd(d)+"T"+pad(d.getHours())+":"+pad(d.getMinutes())+":"+pad(d.getSeconds()); };
+const fmtD = s => { if (!s) return "—"; const d = parseD(s); return d.toLocaleDateString(undefined,{day:"numeric",month:"short",year: d.getFullYear()===new Date().getFullYear()?undefined:"numeric"}); };
+const plural = (n, w, p) => n + " " + (n === 1 ? w : (p || w + "s"));
+function store(k, v){ try{ localStorage.setItem("uat:"+k, JSON.stringify(v)); }catch(e){} }
+function load(k, d){ try{ const v = localStorage.getItem("uat:"+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } }
 
-/* ---------- storage ---------- */
-let state = { requests: [], sample: false, seq: 0 };
-function load(){
-  try { const raw = localStorage.getItem(STORE_KEY); if (raw) { state = JSON.parse(raw); return; } } catch(e){}
-  state = { requests: sampleData(), sample: true, seq: 8 };
-}
-function save(){ try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch(e){ toast("Could not save in this browser"); } }
-function nextId(){ state.seq = (state.seq||0) + 1; return "UAT-" + String(state.seq).padStart(3,"0"); }
+function toast(msg){ const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.appendChild(t); setTimeout(()=>t.remove(), 3200); }
 
-function sampleData(){
-  const t = today(); const h = (d,txt) => ({when:addDays(t,-d), text:txt});
-  return [
-    {id:"UAT-001",raised:addDays(t,-20),customer:"Finance",raisedBy:"Sara A.",project:"Customer Portal",title:"Installment schedule shows wrong due date",description:"Due dates shift by one day for some contracts.",category:"Bug",priority:"Critical",owner:"Ahmed",status:"In Progress",target:addDays(t,-2),nextAction:"Fix timezone handling and redeploy to UAT",links:"",updated:addDays(t,-3),history:[h(20,"Created"),h(3,"Status → In Progress")]},
-    {id:"UAT-002",raised:addDays(t,-18),customer:"Operations",raisedBy:"Omar K.",project:"Back Office",title:"Export merchant report to Excel",description:"Need Excel export on merchant settlement report.",category:"New Feature",priority:"Medium",owner:"Mona",status:"Need to Discuss",target:addDays(t,10),nextAction:"Confirm required columns with Operations",links:"",updated:addDays(t,-12),history:[h(18,"Created"),h(12,"Status → Need to Discuss")]},
-    {id:"UAT-003",raised:addDays(t,-15),customer:"Risk",raisedBy:"Nour H.",project:"Customer Portal",title:"Credit limit field not editable",description:"",category:"Bug",priority:"High",owner:"Ahmed",status:"Completed",target:addDays(t,-5),nextAction:"",links:"",updated:addDays(t,-6),history:[h(15,"Created"),h(6,"Status → Completed")]},
-    {id:"UAT-004",raised:addDays(t,-12),customer:"Customer Service",raisedBy:"Laila M.",project:"Mobile App",title:"OTP screen text unclear in Arabic",description:"",category:"Change Request",priority:"Low",owner:"Youssef",status:"To Do",target:addDays(t,7),nextAction:"Get approved wording",links:"",updated:addDays(t,-12),history:[h(12,"Created")]},
-    {id:"UAT-005",raised:addDays(t,-9),customer:"Finance",raisedBy:"Sara A.",project:"Back Office",title:"Late fee calculation rounding",description:"",category:"Bug",priority:"High",owner:"Mona",status:"In Progress",target:addDays(t,3),nextAction:"Unit tests for rounding rules",links:"",updated:addDays(t,-1),history:[h(9,"Created"),h(1,"Status → In Progress")]},
-    {id:"UAT-006",raised:addDays(t,-6),customer:"Operations",raisedBy:"Omar K.",project:"Mobile App",title:"How to reverse a payment?",description:"",category:"Clarification",priority:"Medium",owner:"Youssef",status:"Completed",target:addDays(t,-1),nextAction:"",links:"",updated:addDays(t,-2),history:[h(6,"Created"),h(2,"Status → Completed")]},
-    {id:"UAT-007",raised:addDays(t,-4),customer:"Risk",raisedBy:"Nour H.",project:"Customer Portal",title:"Add blacklist check on signup",description:"",category:"New Feature",priority:"Critical",owner:"",status:"To Do",target:addDays(t,5),nextAction:"Assign owner",links:"",updated:addDays(t,-4),history:[h(4,"Created")]},
-    {id:"UAT-008",raised:addDays(t,-2),customer:"Customer Service",raisedBy:"Laila M.",project:"Back Office",title:"Duplicate customer records",description:"",category:"Bug",priority:"Medium",owner:"Ahmed",status:"Rejected",target:"",nextAction:"",links:"",updated:addDays(t,-1),history:[h(2,"Created"),h(1,"Status → Rejected (works as designed)")]},
-  ];
-}
-
-/* ---------- derived ---------- */
+/* ---------- derived facts ---------- */
 const isOpen = r => !CLOSED.has(r.status);
 const isOverdue = r => isOpen(r) && r.target && r.target < today();
-const isStale = r => isOpen(r) && r.updated && daysBetween(r.updated, today()) >= STALE_DAYS;
-
-let filters = { project:"", customer:"", priority:"", status:"" };
-let regView = { q:"", sort:"raised", dir:-1, quick:"" };
-function filtered(){
-  return state.requests.filter(r =>
-    (!filters.project || r.project === filters.project) &&
-    (!filters.customer || r.customer === filters.customer) &&
-    (!filters.priority || r.priority === filters.priority) &&
-    (!filters.status || r.status === filters.status));
+const daysSinceUpdate = r => r.lastUpdate ? daysBetween(r.lastUpdate.slice(0,10), today()) : 999;
+const isStale = r => isOpen(r) && r.status !== "On Hold" && daysSinceUpdate(r) > (Number(S.settings.staleDays)||7);
+const weekStart = () => monday(today());
+const completedThisWeek = r => r.status === "Completed" && r.completedAt && r.completedAt >= weekStart() && r.completedAt <= today();
+const chip = st => `<span class="chip" style="--c:var(${STATUS_VAR[st]||"--st-new"})">${esc(st)}</span>`;
+const pchip = p => `<span class="chip" style="--c:var(${PRIO_VAR[p]||"--st-new"})">${esc(p)}</span>`;
+function flags(r){
+  let h = "";
+  if (r.blocker && isOpen(r)) h += `<span class="flag bl">Blocker</span> `;
+  if (r.decisionNeeded && isOpen(r)) h += `<span class="flag dc">Decision needed</span> `;
+  return h;
 }
-const uniq = k => [...new Set(state.requests.map(r => r[k]).filter(Boolean))].sort();
 
-function fillSelect(el, label, opts, val){
-  el.innerHTML = `<option value="">All ${label}</option>` + opts.map(o => `<option${o===val?" selected":""}>${esc(o)}</option>`).join("");
+/* ---------- filters ---------- */
+const F = Object.assign({project:"",customer:"",priority:"",status:""}, (() => { const v = load("filters2", {}); return {project:v.project||"",customer:v.customer||"",priority:v.priority||"",status:v.status||""}; })());
+function uniq(key){ const s = new Set(); for (const r of S.reqs.values()) if (r[key]) s.add(r[key]); return [...s].sort((a,b)=>a.localeCompare(b)); }
+function fillSelect(el, label, items, val){
+  el.innerHTML = `<option value="">All ${esc(label)}</option>` + items.map(i => `<option${i===val?" selected":""}>${esc(i)}</option>`).join("");
+  if (val && !items.includes(val)) { el.insertAdjacentHTML("beforeend", `<option selected>${esc(val)}</option>`); }
 }
-function renderFilters(){
-  fillSelect($("#fProject"),"projects",uniq("project"),filters.project);
-  fillSelect($("#fCustomer"),"departments",uniq("customer"),filters.customer);
-  fillSelect($("#fPriority"),"priorities",PRIORITIES,filters.priority);
-  fillSelect($("#fStatus"),"statuses",STATUSES,filters.status);
-  $("#dlOwners").innerHTML = uniq("owner").map(o=>`<option value="${esc(o)}">`).join("");
+function renderFilterOptions(){
+  fillSelect($("#fProject"), "projects", uniq("project"), F.project);
+  fillSelect($("#fCustomer"), "departments", uniq("customer"), F.customer);
+  fillSelect($("#fPriority"), "priorities", PRIORITIES, F.priority);
+  fillSelect($("#fStatus"), "statuses", STATUSES, F.status);
+  $("#dlOwners").innerHTML = "";
   $("#dlCustomers").innerHTML = uniq("customer").map(o=>`<option value="${esc(o)}">`).join("");
   $("#dlProjects").innerHTML = uniq("project").map(o=>`<option value="${esc(o)}">`).join("");
 }
-const chip = (txt, v) => `<span class="chip" style="--c:var(${v})">${esc(txt)}</span>`;
-const flags = r => (isOverdue(r)?`<span class="flag od">OVERDUE</span>`:"") + (isStale(r)?`<span class="flag st">STALE</span>`:"");
+function filtered(){
+  const out = [];
+  for (const r of S.reqs.values()) {
+    if (F.project && r.project !== F.project) continue;
+    if (F.customer && r.customer !== F.customer) continue;
+    if (F.priority && r.priority !== F.priority) continue;
+    if (F.status && r.status !== F.status) continue;
+    out.push(r);
+  }
+  return out;
+}
+function bindFilters(){
+  const on = (id, key) => $(id).addEventListener("change", e => { F[key] = e.target.value; store("filters2", F); renderFilterOptions(); render(); });
+  on("#fProject","project"); on("#fCustomer","customer"); on("#fPriority","priority"); on("#fStatus","status");
+  $("#fReset").addEventListener("click", () => { Object.assign(F,{project:"",customer:"",priority:"",status:""}); store("filters2",F); renderFilterOptions(); render(); });
+}
+function filterNote(){
+  const parts = [];
+  if (F.project) parts.push(F.project); if (F.customer) parts.push(F.customer);
+  if (F.priority) parts.push(F.priority + " priority"); if (F.status) parts.push(F.status);
+  return parts.length ? " Showing: " + parts.join(" · ") + "." : "";
+}
+
+/* ---------- tabs ---------- */
+function setView(v){
+  S.view = v;
+  document.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === v)));
+  for (const k of ["overview","register","guide"]) $("#view-"+k).hidden = k !== v;
+  $("#filters").hidden = v === "guide";
+  try { history.replaceState(null, "", "#"+v); } catch(e) {}
+  render();
+}
+document.querySelectorAll(".tabs button").forEach(b => b.addEventListener("click", () => setView(b.dataset.tab)));
+function goRegister(patch){ if (patch.status) { F.status = patch.status; store("filters2", F); renderFilterOptions(); delete patch.status; } Object.assign(S.reg, {q:"",status:"",category:"",flag:"",dept:""}, patch); setView("register"); window.scrollTo(0,0); }
+
+/* ---------- history helpers ---------- */
+function rebuildHistIndex(){
+  S.histBy = new Map();
+  for (const e of S.hist) { if (!S.histBy.has(e.requestId)) S.histBy.set(e.requestId, []); S.histBy.get(e.requestId).push(e); }
+  for (const a of S.histBy.values()) a.sort((x,y) => (x.at||"").localeCompare(y.at||""));
+}
+function statusAsOf(r, day){
+  if ((r.raised||"") > day) return null;
+  const ev = S.histBy.get(r.id) || [];
+  let st = null;
+  for (const e of ev) { if (e.at.slice(0,10) > day) break; if (e.type === "status" || e.type === "created") st = e.to || st; }
+  return st || r.status;
+}
+function whoLabel(e){ if (e.byId) return S.names[e.byId] || "A team member"; return e.byLabel || "Unknown"; }
+async function resolveNames(){
+  if (!S.user) return;
+  const ids = [...new Set(S.hist.map(e=>e.byId).filter(Boolean))];
+  if (!ids.length) return;
+  try { const ps = await S.user.profiles(ids); let changed = false;
+    for (const id of ids) { const n = (ps[id] && ps[id].name) || ""; if (n && S.names[id] !== n) { S.names[id] = n; changed = true; } }
+    if (changed) scheduleRender();
+  } catch(e) {}
+}
 
 /* ---------- overview ---------- */
 function renderOverview(){
-  const rs = filtered(), open = rs.filter(isOpen), od = rs.filter(isOverdue), st = rs.filter(isStale);
-  const done = rs.filter(r => r.status==="Completed").length;
-  const discuss = rs.filter(r => r.status==="Need to Discuss").length;
-  const critOpen = open.filter(r => r.priority==="Critical").length;
-  const unassigned = open.filter(r => !r.owner).length;
-  const pct = rs.length ? Math.round(done / rs.length * 100) : 0;
+  const el = $("#view-overview");
+  const rs = filtered();
+  const open = rs.filter(isOpen);
+  const awC = rs.filter(r => AWAIT_CUSTOMER.has(r.status)), awI = rs.filter(r => AWAIT_INTERNAL.has(r.status));
+  const done = rs.filter(r => r.status === "Completed"), rej = rs.filter(r => r.status === "Rejected");
+  const blockers = open.filter(r => r.blocker), decisions = open.filter(r => r.decisionNeeded);
+  const urgent = open.filter(r => r.priority === "Critical" || r.priority === "High").sort((a,b) => PRIO_ORDER[a.priority]-PRIO_ORDER[b.priority] || a.id.localeCompare(b.id));
+  const pct = rs.length ? Math.round((done.length + rej.length) / rs.length * 100) : 0;
 
-  const banner = state.sample ? `<div class="banner"><span>You're looking at <b>sample data</b>. Clear it to start your own tracker, or import a CSV.</span><span class="row"><button class="btn" data-act="import">Import CSV</button><button class="btn primary" data-act="clearSample">Clear sample data</button></span></div>` : "";
-  $("#notice").innerHTML = banner;
+  let sum = `<b>${plural(rs.length,"request")}</b> in scope: <b>${open.length} open</b>, ${done.length} completed, ${rej.length} rejected (${pct}% closed).`;
+  if (blockers.length || decisions.length) sum += ` <b>${plural(blockers.length+decisions.length,"item")}</b> need${blockers.length+decisions.length===1?"s":""} management attention.`;
+  sum += esc(filterNote());
 
-  const kpi = (lab,val,sub,quick,alert) => `<button class="kpi${alert&&val?" alert":""}" data-quick="${quick}"><span class="lab">${lab}</span><span class="val">${val}</span><span class="sub">${sub}</span></button>`;
-  const statusCounts = STATUSES.map(s => [s, rs.filter(r=>r.status===s).length]);
-  const maxS = Math.max(1, ...statusCounts.map(x=>x[1]));
-  const attnItem = r => `<button class="item" data-open="${esc(r.id)}"><div class="t"><span class="id">${esc(r.id)}</span> ${esc(r.title)}</div>${r.nextAction?`<div class="n">Next: ${esc(r.nextAction)}</div>`:""}<div class="m">${chip(r.priority,PRIO_VAR[r.priority])}<span>${esc(r.owner||"Unassigned")}</span>${r.target?`<span>Due ${esc(r.target)}</span>`:""}${flags(r)}</div></button>`;
-  const prioOrder = (a,b) => PRIORITIES.indexOf(a.priority) - PRIORITIES.indexOf(b.priority);
+  const kpi = (lab, val, sub, act) => `<button class="kpi" data-act="${act}"><span class="lab">${lab}</span><span class="val">${val}</span><span class="sub">${sub}</span></button>`;
+  const attnItem = (r, note) => `<button class="item" data-open="${esc(r.id)}"><div class="row"><span class="id">${esc(r.id)}</span>${chip(r.status)}${pchip(r.priority)}</div>
+     <div class="t" dir="auto">${esc(r.title)}</div>${note ? `<div class="n">${esc(note)}</div>` : ""}
+     <div class="m"><span>${esc(r.customer)}</span><span>${esc(r.project)}</span></div></button>`;
 
-  $("#view-overview").innerHTML = `
-    <p class="summary"><b>${rs.length}</b> requests, <b>${open.length}</b> open, <b>${pct}%</b> completed. ${od.length?`<b style="color:var(--crit-ink)">${od.length} overdue</b>.`:"Nothing overdue."}</p>
-    <div class="kpis">
-      ${kpi("Total requests",rs.length,"in current filter","all")}
-      ${kpi("Open",open.length,"not completed or rejected","open")}
-      ${kpi("Overdue",od.length,"past target date","overdue",true)}
-      ${kpi("Critical open",critOpen,"priority = Critical","critical",true)}
-      ${kpi("Need to discuss",discuss,"waiting on a decision","discuss")}
-      ${kpi("Unassigned",unassigned,"open with no owner","unassigned",true)}
-    </div>
-    <div class="grid">
-      <section class="card attn c12">
-        <h2>Needs attention</h2><p class="hint">Overdue, stale (no update in ${STALE_DAYS}+ days) or critical open requests</p>
-        <div class="attn-cols">
-          <div><h3>Overdue &amp; critical</h3>${[...new Set([...od, ...open.filter(r=>r.priority==="Critical")])].sort(prioOrder).slice(0,6).map(attnItem).join("")||`<div class="empty">Nothing here 🎉</div>`}</div>
-          <div><h3>Stale</h3>${st.sort(prioOrder).slice(0,6).map(attnItem).join("")||`<div class="empty">Everything has been updated recently.</div>`}</div>
-        </div>
-      </section>
-      <section class="card c5">
-        <h2>By status</h2><p class="hint">Click a bar to open the register filtered</p>
-        <div class="bars">${statusCounts.map(([s,n])=>`<button class="bar-row" data-fstatus="${esc(s)}"><span>${chip(s,STATUS_VAR[s])}</span><span class="track"><span class="fill" style="display:block;width:${n/maxS*100}%;--c:var(${STATUS_VAR[s]})"></span></span><span class="num">${n}</span></button>`).join("")}</div>
-        <div class="prio">${PRIORITIES.map(p=>{const n=open.filter(r=>r.priority===p).length;return `<button data-fprio="${p}"><div class="v">${n}</div><div class="s">${p} open</div></button>`}).join("")}</div>
-      </section>
-      <section class="card c7">
-        <h2>Raised vs completed</h2><p class="hint">Requests per week, last 8 weeks</p>
-        <div class="legend"><span><i style="background:var(--s1)"></i>Raised</span><span><i style="background:var(--s3)"></i>Completed</span></div>
-        <div class="chart">${weeklyChart(rs)}</div>
-      </section>
-      <section class="card c6">
-        <h2>Open by department</h2><p class="hint">Who is raising the open work</p>
-        ${groupBars(open,"customer")}
-      </section>
-      <section class="card c6">
-        <h2>Open by owner</h2><p class="hint">Workload across the team</p>
-        ${groupBars(open,"owner","Unassigned")}
-      </section>
-    </div>`;
+  el.innerHTML = `
+  <p class="summary">${sum}</p>
+  <div class="kpis">
+    ${kpi("Total requests", rs.length, `${open.length} open · ${rs.length-open.length} closed`, "all")}
+    ${kpi("To Do", rs.filter(r=>r.status==="To Do").length, "Accepted, not started", "st:To Do")}
+    ${kpi("In Progress", rs.filter(r=>r.status==="In Progress").length, "Being worked on", "st:In Progress")}
+    ${kpi("Need to Discuss", rs.filter(r=>r.status==="Need to Discuss").length, "Needs a discussion or decision", "st:Need to Discuss")}
+    ${kpi("Completed", done.length, "Done", "st:Completed")}
+    ${kpi("Rejected", rej.length, "Will not be done", "st:Rejected")}
+  </div>
+  <div class="grid">
+    <section class="card c12 attn">
+      <h2>Needs management attention</h2>
+      <p class="hint">Blockers stop testing or go-live. Decisions are scope, budget or priority calls only management can make.</p>
+      <div class="attn-cols">
+        <div><h3><span class="flag bl">Blockers</span> ${blockers.length}</h3>${blockers.map(r=>attnItem(r, r.escalation)).join("") || `<div class="empty">No open blockers.</div>`}</div>
+        <div><h3><span class="flag dc">Decisions needed</span> ${decisions.length}</h3>${decisions.map(r=>attnItem(r, r.escalation)).join("") || `<div class="empty">No decisions waiting.</div>`}</div>
+      </div>
+    </section>
+    <section class="card c7">
+      <h2>Where requests are now</h2>
+      <p class="hint">Each request counted once, at its current status. Click a row to see the requests.</p>
+      <div class="bars" id="statusBars"></div>
+      <div class="prio" id="prioTiles"></div>
+    </section>
+    <section class="card c5">
+      <h2>Requests by department</h2>
+      <p class="hint">Open versus closed (Completed or Rejected). Click a bar to see the requests.</p>
+      <div class="legend"><span><i style="background:var(--s1)"></i>Open</span><span><i style="background:var(--closed)"></i>Closed</span></div>
+      <div class="chart" id="deptChart"></div>
+      <h2 style="margin-top:18px">Requests by category</h2>
+      <div class="chart" id="catChart" style="margin-top:8px"></div>
+    </section>
+    <section class="card c12">
+      <h2>Open Critical and High priority requests</h2>
+      <p class="hint">The open requests that matter most, highest priority first.</p>
+      <div id="urgentList"></div>
+    </section>
+  </div>`;
+
+  const max = Math.max(1, ...STATUSES.map(s => rs.filter(r=>r.status===s).length));
+  $("#statusBars").innerHTML = STATUSES.map(s => { const n = rs.filter(r=>r.status===s).length;
+    return `<div class="bar-row" data-status="${esc(s)}" role="button" tabindex="0" title="${esc(s)}: ${n}"><span>${chip(s)}</span><div class="track"><div class="fill" style="--c:var(${STATUS_VAR[s]});width:${n/max*100}%"></div></div><span class="num">${n}</span></div>`; }).join("");
+  $("#prioTiles").innerHTML = PRIORITIES.map(p => { const all = rs.filter(r=>r.priority===p), o = all.filter(isOpen).length;
+    return `<button data-prio="${p}">${pchip(p)}<div class="v">${o}</div><div class="s">open of ${all.length}</div></button>`; }).join("");
+
+  drawCharts(rs);
+
+  $("#urgentList").innerHTML = urgent.length ? `<div class="tbl-wrap"><table><thead><tr><th>ID</th><th>Request</th><th>Priority</th><th>Status</th><th>Department</th><th>Next action</th></tr></thead><tbody>${
+    urgent.map(r => `<tr><td class="id">${esc(r.id)}</td><td class="title"><a dir="auto" data-open="${esc(r.id)}">${esc(r.title)}</a><div style="margin-top:3px">${flags(r)}</div></td><td>${pchip(r.priority)}</td><td>${chip(r.status)}</td><td>${esc(r.customer)}</td><td class="na">${esc(r.nextAction||"—")}</td></tr>`).join("")
+  }</tbody></table></div>` : `<div class="empty">No open Critical or High priority requests.</div>`;
+
+  el.querySelectorAll(".kpi").forEach(b => b.addEventListener("click", () => {
+    const a = b.dataset.act;
+    if (a.startsWith("st:")) goRegister({status: a.slice(3)}); else goRegister({}); }));
+  el.querySelectorAll("[data-status]").forEach(b => { const go = () => goRegister({status:b.dataset.status}); b.addEventListener("click", go); b.addEventListener("keydown", e => { if (e.key==="Enter"||e.key===" ") { e.preventDefault(); go(); } }); });
+  el.querySelectorAll("[data-prio]").forEach(b => b.addEventListener("click", () => { F.priority = b.dataset.prio; store("filters2",F); renderFilterOptions(); goRegister({flag:"open"}); }));
+  el.querySelectorAll("[data-open]").forEach(b => b.addEventListener("click", () => openDrawer(b.dataset.open)));
 }
-function groupBars(list,key,blank="—"){
-  const m = {}; list.forEach(r => { const k = r[key]||blank; m[k]=(m[k]||0)+1; });
-  const rows = Object.entries(m).sort((a,b)=>b[1]-a[1]); if(!rows.length) return `<div class="empty">No open requests.</div>`;
-  const max = rows[0][1];
-  return `<div class="bars">${rows.map(([k,n])=>`<div class="bar-row" style="cursor:default"><span>${esc(k)}</span><span class="track"><span class="fill" style="display:block;width:${n/max*100}%;--c:var(--accent)"></span></span><span class="num">${n}</span></div>`).join("")}</div>`;
+function drawCharts(rs){
+  const depts = uniq("customer").filter(d => rs.some(r => r.customer === d));
+  drawStack("#deptChart", depts, "customer", rs, v => { F.customer = v; store("filters2",F); renderFilterOptions(); goRegister({}); });
+  drawStack("#catChart", CATEGORIES, "category", rs, v => goRegister({category: v}));
 }
-function weeklyChart(rs){
-  const W=640,H=200,P={l:28,r:8,t:10,b:24}, weeks=8;
-  const end = new Date(today()); const buckets=[];
-  for(let i=weeks-1;i>=0;i--){ const s=new Date(end); s.setDate(s.getDate()-i*7-6); const e=new Date(end); e.setDate(e.getDate()-i*7);
-    const si=s.toISOString().slice(0,10), ei=e.toISOString().slice(0,10);
-    buckets.push({label:si.slice(5), raised:rs.filter(r=>r.raised>=si&&r.raised<=ei).length,
-      done:rs.filter(r=>r.status==="Completed"&&r.updated>=si&&r.updated<=ei).length}); }
-  const max=Math.max(2,...buckets.map(b=>Math.max(b.raised,b.done)));
-  const iw=W-P.l-P.r, ih=H-P.t-P.b, bw=iw/weeks, y=v=>P.t+ih-v/max*ih;
-  let g=""; for(let k=0;k<=4;k++){const v=Math.round(max*k/4), yy=y(v); g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${yy}" y2="${yy}" stroke="var(--grid)"/><text x="${P.l-6}" y="${yy+4}" text-anchor="end">${v}</text>`;}
-  const bars=buckets.map((b,i)=>{const x=P.l+i*bw+bw*.18, w=bw*.3;
-    return `<rect x="${x}" y="${y(b.raised)}" width="${w}" height="${P.t+ih-y(b.raised)}" rx="2" fill="var(--s1)"><title>${b.label}: ${b.raised} raised</title></rect>
-    <rect x="${x+w+2}" y="${y(b.done)}" width="${w}" height="${P.t+ih-y(b.done)}" rx="2" fill="var(--s3)"><title>${b.label}: ${b.done} completed</title></rect>
-    <text x="${P.l+i*bw+bw/2}" y="${H-6}" text-anchor="middle">${b.label}</text>`}).join("");
-  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Weekly raised vs completed">${g}${bars}</svg>`;
+
+function describe(e){
+  if (e.type === "created") return `Raised${e.to && e.to !== "New" && e.to !== "To Do" ? " (imported as " + chip(e.to) + ")" : ""}`;
+  if (e.type === "status") return `Status ${e.from ? chip(e.from) + " → " : "→ "}${chip(e.to)}${e.text ? `<div class="sub">${esc(e.text)}</div>` : ""}`;
+  if (e.type === "comment") return `Comment: <span dir="auto">${esc(e.text)}</span>`;
+  if (e.type === "change") return `${esc(FIELD_LABEL[e.field]||e.field)}: ${esc(short(e.from))} → <b>${esc(short(e.to))}</b>`;
+  return esc(e.text||"");
+}
+const short = v => { const s = typeof v === "boolean" ? (v?"Yes":"No") : String(v ?? "—") || "—"; return s.length > 60 ? s.slice(0,57)+"…" : (s || "—"); };
+
+/* ---------- charts ---------- */
+function svgEl(w, h, inner){ return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img">${inner}</svg>`; }
+function niceMax(v){ if (v <= 5) return 5; const p = Math.pow(10, Math.floor(Math.log10(v))); for (const m of [1,2,2.5,5,10]) if (m*p >= v) return m*p; return 10*p; }
+
+function drawStack(sel, keys, field, rs, onPick){
+  const host = $(sel); if (!host) return; const W = Math.max(240, host.clientWidth || 380);
+  if (!keys.length) { host.innerHTML = `<div class="empty">No data in this selection.</div>`; return; }
+  const rows = keys.map(c => { const all = rs.filter(r=>r[field]===c); const o = all.filter(isOpen).length; return {c, o, cl: all.length-o, t: all.length}; });
+  const lw = 112, rw = 36, bh = 20, gap = 12, top = 4, H = top + rows.length*(bh+gap);
+  const max = Math.max(1, ...rows.map(r=>r.t)); const sx = v => v/max*(W-lw-rw);
+  let g = "";
+  rows.forEach((r,i) => { const y = top + i*(bh+gap); const wo = sx(r.o), wc = sx(r.cl);
+    const lab = r.c.length > 16 ? r.c.slice(0,15)+"…" : r.c;
+    g += `<text x="0" y="${y+bh/2+4}" style="fill:var(--ink2);font-size:12px">${esc(lab)}</text>`;
+    g += `<rect x="${lw}" y="${y}" width="${W-lw-rw}" height="${bh}" rx="4" style="fill:var(--line2)"/>`;
+    if (r.o) g += `<rect x="${lw}" y="${y}" width="${wo}" height="${bh}" rx="4" style="fill:var(--s1)"/>`;
+    if (r.cl) g += `<rect x="${lw+wo+(r.o?2:0)}" y="${y}" width="${Math.max(0,wc-(r.o?2:0))}" height="${bh}" rx="4" style="fill:var(--closed)"/>`;
+    g += `<text x="${W}" y="${y+bh/2+4}" text-anchor="end" style="fill:var(--ink);font-weight:600;font-size:12px">${r.t}</text>`;
+    g += `<rect class="hit" data-i="${i}" x="0" y="${y-4}" width="${W}" height="${bh+8}" style="fill:transparent;cursor:pointer"/>`;
+  });
+  host.innerHTML = svgEl(W, H, g) + `<div class="tip" hidden></div>`;
+  const tip = host.querySelector(".tip");
+  host.querySelectorAll(".hit").forEach(h => {
+    h.addEventListener("mousemove", ev => { const r = rows[h.dataset.i]; const b = host.getBoundingClientRect();
+      tip.hidden = false; tip.innerHTML = `<b>${esc(r.c)}</b><div><span>Open</span><span>${r.o}</span></div><div><span>Closed</span><span>${r.cl}</span></div><div><span>Total</span><span>${r.t}</span></div>`;
+      tip.style.left = Math.max(0, Math.min(ev.clientX - b.left + 12, b.width - 170)) + "px"; tip.style.top = (ev.clientY - b.top + 12) + "px"; });
+    h.addEventListener("mouseleave", () => tip.hidden = true);
+    h.addEventListener("click", () => onPick(rows[h.dataset.i].c));
+  });
 }
 
 /* ---------- register ---------- */
+const PRIO_ORDER = Object.fromEntries(PRIORITIES.map((p,i)=>[p,i]));
+const ST_ORDER = Object.fromEntries(STATUSES.map((p,i)=>[p,i]));
+const FLAG_OPTS = [["","Any"],["open","Open only"],["closed","Closed only"],["attn","Blockers & decisions"]];
+function regRows(){
+  const q = S.reg.q.trim().toLowerCase();
+  let rs = filtered().filter(r => {
+    if (S.reg.status && r.status !== S.reg.status) return false;
+    if (S.reg.dept && r.customer !== S.reg.dept) return false;
+    if (S.reg.category && r.category !== S.reg.category) return false;
+    switch (S.reg.flag) {
+      case "open": if (!isOpen(r)) return false; break;
+      case "closed": if (isOpen(r)) return false; break;
+      case "cust": if (!AWAIT_CUSTOMER.has(r.status)) return false; break;
+      case "int": if (!AWAIT_INTERNAL.has(r.status)) return false; break;
+      case "attn": if (!(isOpen(r) && (r.blocker || r.decisionNeeded))) return false; break;
+    }
+    if (q) { const hay = [r.id,r.title,r.description,r.customer,r.raisedBy,r.project,r.nextAction,r.resolution,r.escalation].join(" ").toLowerCase(); if (!hay.includes(q)) return false; }
+    return true;
+  });
+  const k = S.sort.key, d = S.sort.dir;
+  const val = r => k==="priority" ? PRIO_ORDER[r.priority] ?? 9 : k==="status" ? ST_ORDER[r.status] ?? 99 : (r[k] || "￿");
+  rs.sort((a,b) => { const va = val(a), vb = val(b); return (va < vb ? -1 : va > vb ? 1 : 0) * d; });
+  return rs;
+}
 function renderRegister(){
-  let rs = filtered();
-  const q = regView.q.trim().toLowerCase();
-  if(q) rs = rs.filter(r => [r.id,r.title,r.description,r.owner,r.customer,r.project,r.nextAction,r.raisedBy].join(" ").toLowerCase().includes(q));
-  const quick = {open:isOpen, overdue:isOverdue, critical:r=>isOpen(r)&&r.priority==="Critical", discuss:r=>r.status==="Need to Discuss", unassigned:r=>isOpen(r)&&!r.owner, stale:isStale}[regView.quick];
-  if(quick) rs = rs.filter(quick);
-  const k = regView.sort, d = regView.dir;
-  const rank = {priority:r=>PRIORITIES.indexOf(r.priority), status:r=>STATUSES.indexOf(r.status)};
-  rs.sort((a,b)=>{ const va = rank[k]?rank[k](a):(a[k]||""), vb = rank[k]?rank[k](b):(b[k]||""); return (va>vb?1:va<vb?-1:0)*d; });
-  const cols = [["id","ID"],["title","Request"],["customer","Department"],["priority","Priority"],["status","Status"],["owner","Owner"],["target","Target"],["nextAction","Next action"]];
-  const arrow = c => regView.sort===c ? (regView.dir>0?" ▲":" ▼") : "";
-  $("#view-register").innerHTML = `
+  const el = $("#view-register");
+  if (!el.dataset.built) {
+    el.dataset.built = "1";
+    el.innerHTML = `
     <div class="toolbar">
-      <label class="fld grow"><span>Search</span><input id="rq" type="search" placeholder="Title, owner, ID…" value="${esc(regView.q)}"></label>
-      <label class="fld"><span>Quick view</span><select id="rquick">
-        ${[["","Everything"],["open","Open"],["overdue","Overdue"],["critical","Critical open"],["discuss","Need to discuss"],["unassigned","Unassigned"],["stale","Stale"]].map(([v,l])=>`<option value="${v}"${v===regView.quick?" selected":""}>${l}</option>`).join("")}
-      </select></label>
-      <button class="btn primary" data-act="new">+ New request</button>
-      <button class="btn" data-act="export">Export CSV</button>
-      <button class="btn" data-act="import">Import CSV</button>
+      <label class="fld grow"><span>Search</span><input id="rQ" type="search" placeholder="ID, title, description, department, next action…"></label>
+      <label class="fld"><span>Category</span><select id="rCat"><option value="">All categories</option>${CATEGORIES.map(s=>`<option>${s}</option>`).join("")}</select></label>
+      <label class="fld"><span>Show</span><select id="rFlag">${FLAG_OPTS.map(([v,l])=>`<option value="${v}">${l}</option>`).join("")}</select></label>
+      <div class="row">
+        <button class="btn primary" id="rNew">New request</button>
+        <button class="btn" id="rImport">Import CSV</button>
+        <button class="btn" id="rExport">Export CSV</button>
+      </div>
     </div>
-    <p class="count">${rs.length} request${rs.length===1?"":"s"}</p>
-    <div class="tbl-wrap"><table>
-      <thead><tr>${cols.map(([c,l])=>`<th data-sort="${c}">${l}${arrow(c)}</th>`).join("")}</tr></thead>
-      <tbody>${rs.map(r=>`<tr>
-        <td class="id">${esc(r.id)}</td>
-        <td class="title"><a data-open="${esc(r.id)}">${esc(r.title)}</a><div class="sub">${esc(r.project)} · ${esc(r.category)} · raised ${esc(r.raised)}</div><div>${flags(r)}</div></td>
-        <td>${esc(r.customer)}</td>
-        <td>${chip(r.priority,PRIO_VAR[r.priority])}</td>
-        <td><select data-inline="status" data-id="${esc(r.id)}">${STATUSES.map(s=>`<option${s===r.status?" selected":""}>${s}</option>`).join("")}</select></td>
-        <td>${esc(r.owner||"—")}</td>
-        <td class="tabular">${esc(r.target||"—")}</td>
-        <td class="na">${esc(r.nextAction||"")}</td>
-      </tr>`).join("") || `<tr><td colspan="8" class="empty">No requests match.</td></tr>`}</tbody>
-    </table></div>`;
+    <div id="importBox"></div>
+    <p class="count" id="rCount"></p>
+    <div class="tbl-wrap"><table><thead><tr>
+      <th data-sort="id">ID</th><th data-sort="title">Request</th><th data-sort="category">Category</th><th data-sort="priority">Priority</th>
+      <th data-sort="status">Status</th><th data-sort="customer">Department</th><th>Next action</th>
+    </tr></thead><tbody id="rBody"></tbody></table></div>`;
+    $("#rQ").addEventListener("input", e => { S.reg.q = e.target.value; renderRegBody(); });
+    $("#rCat").addEventListener("change", e => { S.reg.category = e.target.value; renderRegBody(); });
+    $("#rFlag").addEventListener("change", e => { S.reg.flag = e.target.value; renderRegBody(); });
+    $("#rNew").addEventListener("click", () => openDrawer(null));
+    $("#rImport").addEventListener("click", () => $("#csvFile").click());
+    $("#rExport").addEventListener("click", exportCsv);
+    el.querySelectorAll("th[data-sort]").forEach(th => th.addEventListener("click", () => { const k = th.dataset.sort; S.sort = {key:k, dir: S.sort.key===k ? -S.sort.dir : 1}; renderRegBody(); }));
+    const body = $("#rBody");
+    body.addEventListener("change", e => {
+      const t = e.target, id = t.closest("tr")?.dataset.id, f = t.dataset.f; if (!id || !f) return;
+      const v = t.value.trim();
+      if (f === "customer" && !v) { t.value = S.reqs.get(id)?.customer || ""; return; }
+      saveChanges(id, {[f]: v});
+    });
+    body.addEventListener("click", e => { const a = e.target.closest("[data-open]"); if (a) openDrawer(a.dataset.open); });
+  }
+  $("#rQ").value = S.reg.q; $("#rCat").value = S.reg.category; $("#rFlag").value = S.reg.flag;
+  $("#rNew").hidden = $("#rImport").hidden = S.readOnly;
+  $("#rExport").hidden = !S.downloads;
+  renderRegBody();
+}
+function renderRegBody(){
+  const rs = regRows(), dis = S.readOnly ? " disabled" : "";
+  $("#rCount").textContent = `${plural(rs.length,"request")} shown` + (S.readOnly ? " · view-only access" : " · change priority, status or department right in the table") + "." + filterNote();
+  document.querySelectorAll("#view-register th[data-sort]").forEach(th => { th.textContent = th.textContent.replace(/ [↑↓]$/,""); if (th.dataset.sort===S.sort.key) th.textContent += S.sort.dir>0?" ↑":" ↓"; });
+  $("#rBody").innerHTML = rs.map(r => `<tr data-id="${esc(r.id)}">
+    <td class="id">${esc(r.id)}</td>
+    <td class="title"><a dir="auto" data-open="${esc(r.id)}" tabindex="0">${esc(r.title)}</a><div class="sub">${esc(r.project)}${r.raisedBy?" · by "+esc(r.raisedBy):""}</div><div style="margin-top:3px">${flags(r)}</div></td>
+    <td>${esc(r.category)}</td>
+    <td><select data-f="priority" aria-label="Priority"${dis}>${PRIORITIES.map(p=>`<option${p===r.priority?" selected":""}>${p}</option>`).join("")}</select></td>
+    <td><select data-f="status" aria-label="Status" style="border-left:4px solid var(${STATUS_VAR[r.status]})"${dis}>${STATUSES.map(s=>`<option${s===r.status?" selected":""}>${s}</option>`).join("")}</select></td>
+    <td><input class="owner" data-f="customer" list="dlCustomers" value="${esc(r.customer)}" aria-label="Department"${dis}></td>
+    <td class="na" dir="auto">${esc(r.nextAction||"—")}</td>
+  </tr>`).join("") || `<tr><td colspan="7" class="empty" style="padding:16px">No requests match these filters.</td></tr>`;
+}
+
+/* ---------- writes ---------- */
+const same = (a,b) => JSON.stringify(a ?? "") === JSON.stringify(b ?? "");
+async function writeEvent(ev){ await S.db.collection("history").add(Object.assign({byId:S.me||null, byLabel:S.me?null:"Team member", at:nowIso(), sample:false}, ev)); }
+function writeFailed(e){
+  if (e && e.code === "invalid_argument") { S.readOnly = true; toast("Your access is view-only, so changes can't be saved. Ask the owner for Contributor access."); render(); }
+  else if (e && e.code === "quota_exceeded") toast("The tracker is full (5,000 records). Remove sample or old history to add more.");
+  else toast("Couldn't save just now. Check your connection and try again.");
+}
+async function saveChanges(id, patch, opts={}){
+  if (!S.db || S.readOnly) return false;
+  const r = S.reqs.get(id); if (!r) return false;
+  const changed = {}, events = [];
+  for (const [k,v] of Object.entries(patch)) {
+    if (same(r[k], v)) continue;
+    changed[k] = v;
+    if (k === "status") events.push({requestId:id, type:"status", from:r.status, to:v, text:opts.note||""});
+    else events.push({requestId:id, type:"change", field:k, from:r[k] ?? "", to:v});
+  }
+  if (!Object.keys(changed).length && !opts.comment) return true;
+  if ("status" in changed) {
+    if (changed.status === "Completed") changed.completedAt = today();
+    else if (r.status === "Completed") changed.completedAt = null;
+  }
+  if (opts.comment) events.push({requestId:id, type:"comment", text:opts.comment});
+  changed.lastUpdate = nowIso();
+  try {
+    await S.db.doc("requests/"+id).update(changed);
+    for (const ev of events) await writeEvent(ev);
+    if (changed.status === "Completed" && !(patch.resolution || r.resolution)) toast(`${id} marked Completed. Add a resolution in its details.`);
+    else toast(`${id} updated`);
+    return true;
+  } catch(e) { writeFailed(e); return false; }
+}
+function nextId(){
+  let max = 0; for (const id of S.reqs.keys()) { const m = /(\d+)\s*$/.exec(id); if (m) max = Math.max(max, Number(m[1])); }
+  return "UAT-" + String(max+1).padStart(3,"0");
+}
+async function createRequest(doc, label){
+  const id = doc.id;
+  const full = Object.assign({raised:today(),links:[],blocker:false,decisionNeeded:false,escalation:"",resolution:"",nextAction:"",nextActionOwner:"",description:""}, doc,
+    {lastUpdate: nowIso(), completedAt: doc.status==="Completed" ? (doc.completedAt || today()) : null, sample:false});
+  await S.db.doc("requests/"+id).set(full);
+  await writeEvent({requestId:id, type:"created", to:full.status, text:label||"Request raised", ...(label?{byLabel:label}:{})});
 }
 
 /* ---------- drawer ---------- */
+let drawerId = null;
+function closeDrawer(){ $("#drawerHost").innerHTML = ""; drawerId = null; document.removeEventListener("keydown", escClose); }
+function escClose(e){ if (e.key === "Escape") closeDrawer(); }
+function linksToText(ls){ return (ls||[]).map(l => l.label && l.label !== l.url ? `${l.label} | ${l.url}` : l.url).join("\n"); }
+function textToLinks(t){ return String(t||"").split(/\n|;/).map(s=>s.trim()).filter(Boolean).map(s => { const p = s.split("|").map(x=>x.trim()); return p.length>1 ? {label:p[0], url:p.slice(1).join("|")} : {label:s, url:s}; }); }
+const safeUrl = u => /^https?:\/\//i.test(u) ? u : null;
 function openDrawer(id){
-  const isNew = !id;
-  const r = isNew ? {id:"",raised:today(),customer:"",raisedBy:"",project:"",title:"",description:"",category:"Bug",priority:"Medium",owner:"",status:"To Do",target:"",nextAction:"",links:"",history:[]} : state.requests.find(x=>x.id===id);
-  if(!r) return;
-  const opt = (list,v) => list.map(o=>`<option${o===v?" selected":""}>${o}</option>`).join("");
-  const links = (r.links||"").split(/\s+/).filter(Boolean);
-  $("#drawerHost").innerHTML = `<div class="drawer-bg" data-act="close"></div>
-  <aside class="drawer" role="dialog" aria-modal="true" aria-label="Request details">
-    <header><h2>${isNew?"New request":`<span class="id">${esc(r.id)}</span> ${esc(r.title)}`}</h2><button class="btn ghost" data-act="close" aria-label="Close">✕</button></header>
+  const isNew = !id; const r = isNew ? {id:nextId(), raised:today(), status:"To Do", priority:"Medium", category:"Bug", customer:F.customer||"", project:F.project||""} : S.reqs.get(id);
+  if (!r) return; drawerId = isNew ? null : id;
+  const ro = S.readOnly ? " disabled" : "";
+  const opt = (list, v) => list.map(x=>`<option${x===v?" selected":""}>${x}</option>`).join("");
+  $("#drawerHost").innerHTML = `<div class="drawer-bg"></div><aside class="drawer" role="dialog" aria-modal="true" aria-label="Request details">
+    <header><h2>${isNew ? "New request" : `<span class="id">${esc(r.id)}</span> <span dir="auto">${esc(r.title)}</span>`}</h2><button class="btn ghost" id="dClose" aria-label="Close">Close</button></header>
     <div class="body">
-      <form class="form" id="reqForm">
-        <label class="full">Title *<input name="title" required value="${esc(r.title)}"></label>
-        <label class="full">Description<textarea name="description" rows="3">${esc(r.description)}</textarea></label>
-        <label>Project<input name="project" list="dlProjects" value="${esc(r.project)}"></label>
-        <label>Department<input name="customer" list="dlCustomers" value="${esc(r.customer)}"></label>
-        <label>Raised by<input name="raisedBy" value="${esc(r.raisedBy)}"></label>
-        <label>Date raised<input type="date" name="raised" value="${esc(r.raised)}"></label>
-        <label>Category<select name="category">${opt(CATEGORIES,r.category)}</select></label>
-        <label>Priority<select name="priority">${opt(PRIORITIES,r.priority)}</select></label>
-        <label>Status<select name="status">${opt(STATUSES,r.status)}</select></label>
-        <label>Owner<input name="owner" list="dlOwners" value="${esc(r.owner)}"></label>
-        <label>Target date<input type="date" name="target" value="${esc(r.target)}"></label>
-        <label class="full">Next action<input name="nextAction" value="${esc(r.nextAction)}"></label>
-        <label class="full">Links (space separated)<input name="links" value="${esc(r.links)}"></label>
-        <label class="full">Add a note to history<input name="note" placeholder="Optional"></label>
-        <div class="full row"><button class="btn primary" type="submit">${isNew?"Create request":"Save changes"}</button><button class="btn" type="button" data-act="close">Cancel</button>${isNew?"":`<span style="flex:1"></span><button class="btn danger" type="button" data-act="delete" data-id="${esc(r.id)}">Delete</button>`}</div>
+      ${isNew ? "" : `<div class="row">${chip(r.status)}${pchip(r.priority)}${flags(r)}</div>`}
+      <form class="form" id="dForm">
+        <label>Request ID<input id="d_id" value="${esc(r.id)}"${isNew?"":" readonly"}${ro}></label>
+        <label>Department<input id="d_customer" list="dlCustomers" value="${esc(r.customer||"")}" required${ro}></label>
+        <label>Project<input id="d_project" list="dlProjects" value="${esc(r.project||"")}" required${ro}></label>
+        <label>Raised by<input id="d_raisedBy" value="${esc(r.raisedBy||"")}" placeholder="Person who reported it"${ro}></label>
+        <label class="full">Title<input dir="auto" id="d_title" value="${esc(r.title||"")}" required${ro}></label>
+        <label class="full">Description<textarea dir="auto" id="d_description" rows="3"${ro}>${esc(r.description||"")}</textarea></label>
+        <label>Category<select id="d_category"${ro}>${opt(CATEGORIES, r.category)}</select></label>
+        <label>Priority<select id="d_priority"${ro}>${opt(PRIORITIES, r.priority)}</select></label>
+        <label>Status<select id="d_status"${ro}>${opt(STATUSES, r.status)}</select></label>
+        <label class="full">Next action<input id="d_nextAction" value="${esc(r.nextAction||"")}"${ro}></label>
+        <label class="full">Resolution<textarea id="d_resolution" rows="2" placeholder="How it was resolved, or why it was rejected"${ro}>${esc(r.resolution||"")}</textarea></label>
+        <label class="full">Links / attachments <span class="muted" style="font-weight:400">one per line, optionally “Label | https://…”</span><textarea id="d_links" rows="2"${ro}>${esc(linksToText(r.links))}</textarea></label>
+        <p class="sect full">Management escalation</p>
+        <label class="chk"><input type="checkbox" id="d_blocker"${r.blocker?" checked":""}${ro}> Blocker</label>
+        <label class="chk"><input type="checkbox" id="d_decisionNeeded"${r.decisionNeeded?" checked":""}${ro}> Management decision needed</label>
+        <label class="full">Escalation note <span class="muted" style="font-weight:400">shown to management on the overview</span><input id="d_escalation" value="${esc(r.escalation||"")}"${ro}></label>
+        <label class="full">Note for this change (optional)<input id="d_note" placeholder="e.g. Customer confirmed fix on retest"${ro}></label>
+        ${S.readOnly ? "" : `<div class="full row"><button class="btn primary" type="submit">${isNew?"Create request":"Save changes"}</button><button class="btn" type="button" id="dCancel">Cancel</button></div>`}
       </form>
-      ${links.length?`<div><div class="sect">Links</div>${links.map(l=>`<div><a href="${esc(l)}" target="_blank" rel="noopener" style="color:var(--accent);word-break:break-all">${esc(l)}</a></div>`).join("")}</div>`:""}
-      ${isNew?"":`<div><div class="sect">History</div><ul class="timeline">${(r.history||[]).slice().reverse().map(h=>`<li><span class="when">${esc(h.when)}</span><span>${esc(h.text)}</span></li>`).join("")||`<li><span></span><span class="empty">No history</span></li>`}</ul></div>`}
-    </div>
-  </aside>`;
-  const f = $("#reqForm");
-  f.title.focus();
-  f.addEventListener("submit", e => {
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(f).entries());
-    const note = data.note.trim(); delete data.note;
-    if(isNew){
-      const rec = {...r, ...data, id:nextId(), updated:today(), history:[{when:today(),text:"Created"}]};
-      if(note) rec.history.push({when:today(),text:note});
-      state.requests.push(rec); toast(`${rec.id} created`);
+      ${isNew ? "" : `
+      ${(r.links||[]).length ? `<div class="links"><p class="sect">Links</p>${r.links.map(l => safeUrl(l.url) ? `<div><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label||l.url)}</a></div>` : `<div>${esc(l.label||l.url)}</div>`).join("")}</div>` : ""}
+      <p class="sect">History</p>
+      ${S.readOnly ? "" : `<div class="row"><input id="dComment" placeholder="Add a comment or progress note" style="flex:1 1 220px"><button class="btn" id="dAddComment">Add comment</button></div>`}
+      <ul class="timeline" id="dHist"></ul>`}
+    </div></aside>`;
+  document.addEventListener("keydown", escClose);
+  $(".drawer-bg").addEventListener("click", closeDrawer); $("#dClose").addEventListener("click", closeDrawer);
+  $("#dCancel")?.addEventListener("click", closeDrawer);
+  renderDrawerHistory();
+  $("#dForm").addEventListener("submit", async e => {
+    e.preventDefault(); if (S.readOnly) return;
+    const g = k => $("#d_"+k).value.trim();
+    const doc = {customer:g("customer"), raisedBy:g("raisedBy"), project:g("project"), title:g("title"), description:g("description"), category:g("category"),
+      priority:g("priority"), status:g("status"), nextAction:g("nextAction"),
+      resolution:g("resolution"), links:textToLinks($("#d_links").value), blocker:$("#d_blocker").checked, decisionNeeded:$("#d_decisionNeeded").checked, escalation:g("escalation")};
+    if (!doc.title || !doc.customer || !doc.project) { toast("Title, department and project are required."); return; }
+    const btn = e.submitter; if (btn) btn.disabled = true;
+    if (isNew) {
+      const nid = g("id").replace(/[^A-Za-z0-9_\-.]/g,"-") || nextId();
+      if (S.reqs.has(nid)) { toast(`${nid} already exists. Use a different ID.`); if (btn) btn.disabled = false; return; }
+      try { await createRequest(Object.assign({id:nid}, doc)); const note = g("note"); if (note) await writeEvent({requestId:nid, type:"comment", text:note}); toast(`${nid} created`); closeDrawer(); }
+      catch(err) { writeFailed(err); if (btn) btn.disabled = false; }
     } else {
-      const changes = ["status","priority","owner","target"].filter(k=>(r[k]||"")!==(data[k]||"")).map(k=>`${LABEL[k]} → ${data[k]||"—"}`);
-      Object.assign(r, data, {updated:today()});
-      r.history = r.history||[];
-      if(changes.length) r.history.push({when:today(),text:changes.join("; ")});
-      if(note) r.history.push({when:today(),text:note});
-      toast("Saved");
+      const ok = await saveChanges(id, doc, {note:g("note")});
+      if (ok) closeDrawer(); else if (btn) btn.disabled = false;
     }
-    save(); closeDrawer(); renderAll();
   });
+  $("#dAddComment")?.addEventListener("click", async () => { const t = $("#dComment").value.trim(); if (!t) return; if (await saveChanges(id, {}, {comment:t})) $("#dComment").value = ""; });
+  setTimeout(() => (isNew ? $("#d_customer") : $("#dClose")).focus(), 30);
 }
-function closeDrawer(){ $("#drawerHost").innerHTML = ""; }
-function clearSampleIfNeeded(){ if(state.sample){ state.requests=[]; state.seq=0; state.sample=false; } }
+function renderDrawerHistory(){
+  const ul = $("#dHist"); if (!ul || !drawerId) return;
+  const ev = [...(S.histBy.get(drawerId)||[])].reverse();
+  ul.innerHTML = ev.map(e => `<li style="grid-template-columns:1fr"><span>${describe(e)}<div class="who">${esc(whoLabel(e))}</div></span></li>`).join("") || `<li style="grid-template-columns:1fr"><span class="muted">No history yet.</span></li>`;
+}
 
 /* ---------- CSV ---------- */
-function toCSV(){
-  const cols=[...FIELDS,"history"];
-  const cell = v => { const s=String(v??""); return /[",\n\r]/.test(s)?`"${s.replace(/"/g,'""')}"`:s; };
-  const rows = state.requests.map(r => cols.map(c => c==="history" ? cell((r.history||[]).map(h=>`${h.when}: ${h.text}`).join(" | ")) : cell(r[c])).join(","));
-  return "﻿" + [cols.map(c=>LABEL[c]||"History").join(","), ...rows].join("\r\n");
+const COLS = [["id","Request ID"],["customer","Department"],["raisedBy","Raised By"],["project","Project"],["title","Title"],["description","Description"],
+  ["category","Category"],["priority","Priority"],["status","Status"],["nextAction","Next Action"],
+  ["resolution","Resolution"],["links","Links"],["blocker","Blocker"],["decisionNeeded","Decision Needed"],["escalation","Escalation Note"]];
+const norm = s => String(s||"").toLowerCase().replace(/[^a-z0-9]/g,"");
+const HEADER_MAP = {}; for (const [k,l] of COLS) { HEADER_MAP[norm(k)] = k; HEADER_MAP[norm(l)] = k; }
+Object.assign(HEADER_MAP, {customer:"customer",department:"customer",customerdepartment:"customer",requesttitle:"title",daterasied:"raised",dateraised:"raised",targetdate:"target",lastupdated:"lastUpdate",attachments:"links",linksattachments:"links",decision:"decisionNeeded",id:"id",submittedby:"raisedBy",requestedby:"raisedBy",reporter:"raisedBy"});
+function csvCell(v){ const s = v == null ? "" : String(v); return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s; }
+function toCsv(rows){
+  const out = [COLS.map(c=>c[1]).join(",")];
+  for (const r of rows) out.push(COLS.map(([k]) => {
+    let v = r[k];
+    if (k === "links") v = (v||[]).map(l => l.label && l.label !== l.url ? `${l.label} | ${l.url}` : l.url).join("; ");
+    if (k === "blocker" || k === "decisionNeeded") v = v ? "Yes" : "No";
+    return csvCell(v);
+  }).join(","));
+  return out.join("\r\n");
 }
-function parseCSV(text){
-  text = text.replace(/^﻿/,""); const rows=[]; let row=[], f="", q=false;
-  for(let i=0;i<text.length;i++){ const c=text[i];
-    if(q){ if(c==='"'){ if(text[i+1]==='"'){f+='"';i++;} else q=false; } else f+=c; }
-    else if(c==='"') q=true; else if(c===","){row.push(f);f="";}
-    else if(c==="\n"||c==="\r"){ if(c==="\r"&&text[i+1]==="\n") i++; row.push(f); rows.push(row); row=[]; f=""; }
-    else f+=c; }
-  if(f||row.length){row.push(f);rows.push(row);}
-  return rows.filter(r=>r.some(x=>x.trim()));
-}
-function importCSV(text){
-  const rows = parseCSV(text); if(rows.length<2){ toast("CSV has no rows"); return; }
-  const head = rows[0].map(h=>h.trim().toLowerCase());
-  const map = {}; [...FIELDS,"history"].forEach(k=>{ const lab=(LABEL[k]||"History").toLowerCase(); const i=head.findIndex(h=>h===lab||h===k.toLowerCase()); if(i>=0) map[k]=i; });
-  if(map.title===undefined){ toast("CSV needs a Title column"); return; }
-  clearSampleIfNeeded();
-  let added=0, updated=0;
-  rows.slice(1).forEach(cells=>{
-    const r={}; FIELDS.forEach(k=>{ if(map[k]!==undefined) r[k]=(cells[map[k]]||"").trim(); });
-    if(!r.title) return;
-    if(!STATUSES.includes(r.status)) r.status="To Do";
-    if(!PRIORITIES.includes(r.priority)) r.priority="Medium";
-    if(!CATEGORIES.includes(r.category)) r.category="Bug";
-    r.history = map.history!==undefined ? (cells[map.history]||"").split(" | ").filter(Boolean).map(s=>{const m=s.match(/^(\d{4}-\d{2}-\d{2}): (.*)$/);return m?{when:m[1],text:m[2]}:{when:"",text:s};}) : [];
-    const ex = r.id && state.requests.find(x=>x.id===r.id);
-    if(ex){ Object.assign(ex,r); updated++; }
-    else { r.id = r.id || nextId(); r.raised=r.raised||today(); r.updated=r.updated||today(); if(!r.history.length) r.history=[{when:today(),text:"Imported"}]; state.requests.push(r); added++; }
-    const n = parseInt((r.id||"").replace(/\D/g,""),10); if(n>state.seq) state.seq=n;
-  });
-  save(); renderAll(); toast(`Imported: ${added} new, ${updated} updated`);
-}
-function download(name, text){
-  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([text],{type:"text/csv;charset=utf-8"})); a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-}
-
-/* ---------- misc ---------- */
-let toastT;
-function toast(msg){ clearTimeout(toastT); let t=$(".toast"); if(!t){t=document.createElement("div");t.className="toast";document.body.appendChild(t);} t.textContent=msg; toastT=setTimeout(()=>t.remove(),2600); }
-function setTab(tab){
-  document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected", String(b.dataset.tab===tab)));
-  $("#view-overview").hidden = tab!=="overview"; $("#view-register").hidden = tab!=="register";
-}
-function renderAll(){ renderFilters(); renderOverview(); renderRegister(); }
-
-/* ---------- events ---------- */
-document.addEventListener("click", e => {
-  const t = e.target.closest("[data-tab],[data-open],[data-act],[data-quick],[data-sort],[data-fstatus],[data-fprio]"); if(!t) return;
-  if(t.dataset.tab) setTab(t.dataset.tab);
-  else if(t.dataset.open) openDrawer(t.dataset.open);
-  else if(t.dataset.quick){ regView.quick = t.dataset.quick==="all"?"":t.dataset.quick; renderRegister(); setTab("register"); }
-  else if(t.dataset.fstatus){ filters.status=t.dataset.fstatus; renderAll(); setTab("register"); }
-  else if(t.dataset.fprio){ filters.priority=t.dataset.fprio; regView.quick="open"; renderAll(); setTab("register"); }
-  else if(t.dataset.sort){ const c=t.dataset.sort; regView.dir = regView.sort===c ? -regView.dir : 1; regView.sort=c; renderRegister(); }
-  else switch(t.dataset.act){
-    case "close": closeDrawer(); break;
-    case "new": openDrawer(); break;
-    case "export": download(`uat-requests-${today()}.csv`, toCSV()); break;
-    case "import": $("#csvFile").click(); break;
-    case "clearSample": if(confirm("Remove the sample requests?")){ state={requests:[],sample:false,seq:0}; save(); renderAll(); } break;
-    case "delete": if(confirm(`Delete ${t.dataset.id}?`)){ state.requests=state.requests.filter(r=>r.id!==t.dataset.id); save(); closeDrawer(); renderAll(); toast("Deleted"); } break;
+function parseCsv(text){
+  const rows = []; let row = [], cell = "", q = false;
+  text = text.replace(/^﻿/,"");
+  for (let i=0;i<text.length;i++){
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i+1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; }
+    else if (c === '"') q = true;
+    else if (c === ",") { row.push(cell); cell = ""; }
+    else if (c === "\n" || c === "\r") { if (c === "\r" && text[i+1] === "\n") i++; row.push(cell); rows.push(row); row = []; cell = ""; }
+    else cell += c;
   }
+  if (cell !== "" || row.length) { row.push(cell); rows.push(row); }
+  return rows.filter(r => r.some(c => c.trim() !== ""));
+}
+function normDate(s){
+  s = String(s||"").trim(); if (!s) return "";
+  let m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(s); if (m) return `${m[1]}-${pad(+m[2])}-${pad(+m[3])}`;
+  m = /^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})$/.exec(s); if (m) { const y = m[3].length===2 ? "20"+m[3] : m[3]; return `${y}-${pad(+m[2])}-${pad(+m[1])}`; }
+  const d = new Date(s); return isNaN(d) ? "" : ymd(d);
+}
+const STATUS_ALIAS = {done:"Completed",new:"To Do",open:"To Do",inprogress:"In Progress",wip:"In Progress",needtodiscuss:"Need to Discuss",discuss:"Need to Discuss",rejected:"Rejected"};
+const pick = (list, v, dflt) => list.find(x => norm(x) === norm(v)) || (norm(v)==="cr" ? "Change Request" : (list === STATUSES && STATUS_ALIAS[norm(v)]) || dflt);
+const yes = v => /^(y|yes|true|1|x)$/i.test(String(v||"").trim());
+let pendingImport = null;
+$("#csvFile").addEventListener("change", async e => {
+  const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+  const rows = parseCsv(await f.text()); if (rows.length < 2) { toast("That file has no data rows."); return; }
+  const keys = rows[0].map(h => HEADER_MAP[norm(h)] || null);
+  if (!keys.includes("title")) { toast("Couldn't find a Title column. Use the CSV template from the Guide tab."); return; }
+  let warn = 0; const recs = []; let seq = Number((/(\d+)$/.exec(nextId())||[0,1])[1]);
+  for (const row of rows.slice(1)) {
+    const o = {}; keys.forEach((k,i) => { if (k) o[k] = (row[i]||"").trim(); });
+    if (!o.title) continue;
+    const rec = {
+      id: (o.id || "").replace(/[^A-Za-z0-9_\-.]/g,"-") || ("UAT-" + String(seq++).padStart(3,"0")),
+      customer: o.customer || "Unspecified", raisedBy: o.raisedBy || "", project: o.project || "Unspecified", title: o.title,
+      description: o.description || "", category: pick(CATEGORIES, o.category, "Clarification"), priority: pick(PRIORITIES, o.priority, "Medium"),
+      status: pick(STATUSES, o.status, "To Do"), nextAction: o.nextAction || "",
+      resolution: o.resolution || "", links: textToLinks(o.links), blocker: yes(o.blocker), decisionNeeded: yes(o.decisionNeeded), escalation: o.escalation || ""
+    };
+    if ((o.category && rec.category !== pick(CATEGORIES,o.category,null)) || (o.priority && !pick(PRIORITIES,o.priority,null)) || (o.status && !pick(STATUSES,o.status,null))) warn++;
+    recs.push(rec);
+  }
+  const upd = recs.filter(r => S.reqs.has(r.id)).length;
+  pendingImport = recs;
+  $("#importBox").innerHTML = `<div class="banner"><div class="row" style="justify-content:space-between"><span><b>${esc(f.name)}</b>: ${plural(recs.length,"row")} ready — ${recs.length-upd} new, ${upd} updates to existing IDs.${warn?` ${plural(warn,"row")} had an unrecognised category, priority or status and will use the default.`:""} Every change is written to history.</span>
+    <span class="row"><button class="btn primary" id="impGo">Import</button><button class="btn" id="impCancel">Cancel</button></span></div></div>`;
+  $("#impCancel").addEventListener("click", () => { pendingImport = null; $("#importBox").innerHTML = ""; });
+  $("#impGo").addEventListener("click", runImport);
 });
-document.addEventListener("change", e => {
-  const t=e.target;
-  if(t.dataset.inline==="status"){ const r=state.requests.find(x=>x.id===t.dataset.id); if(r){ r.status=t.value; r.updated=today(); (r.history=r.history||[]).push({when:today(),text:`Status → ${t.value}`}); save(); renderOverview(); renderFilters(); toast(`${r.id} → ${t.value}`);} }
-  else if(t.id==="rquick"){ regView.quick=t.value; renderRegister(); }
-  else if(["fProject","fCustomer","fPriority","fStatus"].includes(t.id)){
-    filters[{fProject:"project",fCustomer:"customer",fPriority:"priority",fStatus:"status"}[t.id]] = t.value; renderAll(); }
-});
-document.addEventListener("input", e => { if(e.target.id==="rq"){ regView.q=e.target.value; const pos=e.target.selectionStart; renderRegister(); const el=$("#rq"); el.focus(); el.setSelectionRange(pos,pos);} });
-document.addEventListener("keydown", e => { if(e.key==="Escape") closeDrawer(); });
-$("#fReset").addEventListener("click", ()=>{ filters={project:"",customer:"",priority:"",status:""}; regView.quick=""; regView.q=""; renderAll(); });
-$("#hdrNew").addEventListener("click", ()=>openDrawer());
-$("#csvFile").addEventListener("change", e => { const f=e.target.files[0]; if(!f) return; f.text().then(importCSV); e.target.value=""; });
+async function runImport(){
+  const recs = pendingImport; if (!recs) return; pendingImport = null;
+  const box = $("#importBox"); let done = 0;
+  box.innerHTML = `<div class="banner">Importing… <span id="impN">0</span> of ${recs.length}</div>`;
+  try {
+    for (const r of recs) {
+      if (S.reqs.has(r.id)) { const {id, ...patch} = r; await saveChanges(id, patch, {note:"Updated from CSV import"}); }
+      else await createRequest(r, "CSV import");
+      done++; const n = $("#impN"); if (n) n.textContent = done;
+    }
+    box.innerHTML = ""; toast(`Imported ${plural(done,"row")}`);
+  } catch(e) { box.innerHTML = ""; writeFailed(e); toast(`Stopped after ${done} rows.`); }
+}
+async function saveFile(filename, data){
+  if (!S.downloads) return;
+  try { await S.downloads.save({filename, data}); }
+  catch(e) { if (e && e.code !== "declined") toast("The file couldn't be saved here."); }
+}
+function exportCsv(){ saveFile(`uat-requests-${today()}.csv`, toCsv(regRows())); }
 
-load(); renderAll();
+/* ---------- guide ---------- */
+const STATUS_DEF = [
+  ["New","Logged, not yet looked at.","Project team","Triage: confirm category, priority and department."],
+  ["Under Review","Team is analysing, reproducing or estimating.","Project team","Decide: fix, change request, clarify, or reject."],
+  ["Awaiting Customer","Waiting on the customer for information, a decision or sign-off.","Customer","Name the question and who must answer in Next action."],
+  ["Approved","Accepted for delivery (and funded, for change requests).","Project team","Schedule the work."],
+  ["In Progress","Being fixed, built, configured or delivered (training).","Project team","Add a comment when there is progress."],
+  ["Ready for UAT Retest","Fix is deployed to UAT; the customer needs to retest.","Customer","Customer retests and confirms, or it goes back to In Progress."],
+  ["Completed","Customer confirmed it is resolved. Closed.","—","Fill in Resolution."],
+  ["Rejected","Will not be done (not a defect, out of scope, duplicate). Closed.","—","Record the reason and who agreed in Resolution."],
+  ["On Hold","Paused on purpose (e.g. waiting for a policy, budget or another project).","Named in Next action","Say what un-pauses it."]
+];
+function renderGuide(){
+  const el = $("#view-guide");
+  const sampleN = [...S.reqs.values()].filter(r=>r.sample).length;
+  el.innerHTML = `<div class="guide">
+  <div class="card" style="margin-bottom:16px">
+  <h2>How this tracker works</h2>
+  <p>This page is the single shared register. Anyone with edit access changes a request here, and the change appears for everyone at once. Every status change, field change and comment is saved in the request's history, so progress is recorded automatically. There's no separate spreadsheet to keep in sync.</p>
+  <p>The <b>Management overview</b> counts each request once, at its current status. A request that moves through five statuses still counts as one request.</p>
+  </div>
+
+  <h2>Status definitions</h2>
+  <div class="tbl-wrap"><table><thead><tr><th>Status</th><th>Meaning</th><th>Ball is with</th><th>What should happen next</th></tr></thead><tbody>
+  ${STATUS_DEF.map(([s,m,w,n]) => `<tr><td>${chip(s)}</td><td>${esc(m)}</td><td>${esc(w)}</td><td>${esc(n)}</td></tr>`).join("")}
+  </tbody></table></div>
+  <p><b>Groupings used on the overview:</b> <i>Awaiting customer</i> = Awaiting Customer + Ready for UAT Retest. <i>Awaiting internal action</i> = New + Under Review + Approved + In Progress. <i>Closed</i> = Completed + Rejected. On Hold is counted on its own.</p>
+
+  <h2>Flags</h2>
+  <ul>
+    <li><span class="flag bl">Blocker</span> Stops testing or go-live. Tick <i>Blocker</i> in the request and write an escalation note.</li>
+    <li><span class="flag dc">Decision needed</span> Needs a management call on scope, budget or priority. Tick <i>Management decision needed</i> and say what the options are.</li>
+  </ul>
+
+  <h2>Updating requests</h2>
+  <ol>
+    <li><b>Quick updates:</b> in the Request register, change Priority, Status or Department right in the row. It saves as soon as you pick a value.</li>
+    <li><b>Full edit:</b> click a request title to open its details. Edit any field, add an optional note explaining the change, then Save.</li>
+    <li><b>Progress notes:</b> use <i>Add comment</i> in the details panel. Comments count as an update.</li>
+    <li><b>New request:</b> “New request” in the register. The next ID (UAT-###) is filled in for you.</li>
+    <li><b>Closing:</b> set Completed only after the customer confirms on retest, and fill in Resolution. For Rejected, record the reason and who agreed.</li>
+  </ol>
+  <p><b>Suggested routine:</b> the team updates statuses before the daily UAT stand-up. Management reviews the overview weekly, starting with “Needs management attention” and the open Critical and High requests.</p>
+
+  <h2>Sharing</h2>
+  <ul>
+    <li>Use the <b>Share</b> button on this page. Give the project team <b>Contributor</b> access so they can edit. Give management <b>Viewer</b> access: they see everything live but can't change data.</li>
+    <li>Everyone must be signed in to claude.ai in your organization. For people without an account, use the separate public view page.</li>
+    <li>To send a snapshot by email, use <b>Export CSV</b> in the register. It exports the rows currently shown, with your filters applied.</li>
+    <li>Direct people to a view with a link ending in <code>#overview</code> or <code>#register</code>.</li>
+  </ul>
+
+  <h2>Adding requests in bulk</h2>
+  <ol>
+    <li>Download the CSV template below and fill one row per request in Excel or Google Sheets (keep the header row). Save as CSV.</li>
+    <li>Category, priority and status must use the names above; anything unrecognised becomes Clarification / Medium / New.</li>
+    <li>Links: separate several with <code>;</code>, optionally as <code>Label | https://…</code>. Blocker / Decision Needed: Yes or No.</li>
+    <li>In the register, click <b>Import CSV</b>, check the preview, then Import. A row whose Request ID already exists updates that request, and changes go into history.</li>
+  </ol>
+
+  <div class="card" style="margin-top:18px">
+    <h2>Data tools</h2>
+    <div class="row" style="margin-top:10px">
+      ${S.downloads ? `<button class="btn" id="gTemplate">Download CSV template</button>` : ""}
+      ${S.readOnly || !sampleN ? "" : `<button class="btn danger" id="gClear">Remove ${plural(sampleN,"sample request")}</button>`}
+      <span id="gConfirm"></span>
+    </div>
+  </div>
+
+  <h2>Assumptions</h2>
+  <ul>
+    <li>Department is the business area that raised the request (Sales, Credit, Operation…).</li>
+    <li>Attachments are stored as links (SharePoint, Drive, Jira and so on), not uploaded files.</li>
+  </ul>
+  </div>`;
+  $("#gStaleSave")?.addEventListener("click", async () => {
+    const v = Math.max(1, Math.min(60, Number($("#gStale").value)||7));
+    try { await S.db.doc("config/settings").set(Object.assign({}, S.settings, {staleDays:v})); toast("Saved"); } catch(e) { writeFailed(e); }
+  });
+  $("#gTemplate")?.addEventListener("click", () => saveFile("uat-requests-template.csv", toCsv([{id:"UAT-101",customer:"Sales",raisedBy:"Reporter name",project:"Portal",title:"Example: invoice total wrong on page 2",description:"Describe what was expected and what happened.",category:"Bug",priority:"High",status:"New",nextAction:"Reproduce issue",resolution:"",links:[{label:"Screenshot",url:"https://example.com/file"}],blocker:false,decisionNeeded:false,escalation:""}])));
+  $("#gClear")?.addEventListener("click", () => {
+    $("#gConfirm").innerHTML = `<span class="row"><span>Delete ${plural(sampleN,"sample request")} and their history?</span><button class="btn danger" id="gYes">Delete</button><button class="btn" id="gNo">Keep</button></span>`;
+    $("#gNo").addEventListener("click", () => $("#gConfirm").innerHTML = "");
+    $("#gYes").addEventListener("click", clearSample);
+  });
+}
+async function clearSample(){
+  const ids = new Set([...S.reqs.values()].filter(r=>r.sample).map(r=>r.id));
+  const hs = S.hist.filter(e => e.sample || ids.has(e.requestId));
+  $("#gConfirm").textContent = "Removing…";
+  try {
+    for (const e of hs) await S.db.doc("history/"+e._id).delete();
+    for (const id of ids) await S.db.doc("requests/"+id).delete();
+    toast("Sample data removed");
+  } catch(e) { writeFailed(e); }
+}
+
+/* ---------- render loop & boot ---------- */
+let rq = 0;
+function scheduleRender(){
+  cancelAnimationFrame(rq);
+  rq = requestAnimationFrame(() => {
+    const a = document.activeElement;
+    if (a && a.closest && a.closest("#rBody") && /^(INPUT|SELECT)$/.test(a.tagName)) { a.addEventListener("blur", scheduleRender, {once:true}); renderDrawerHistory(); return; }
+    renderFilterOptions(); render(); renderDrawerHistory();
+  });
+}
+function render(){
+  if (!S.loaded.r) { $("#view-"+S.view).innerHTML = S.view === "guide" ? "" : `<div class="card"><p class="muted" style="margin:0">Loading requests…</p></div>`; if (S.view === "guide") renderGuide(); return; }
+  const sample = [...S.reqs.values()].some(r=>r.sample);
+  $("#notice").innerHTML = (sample ? `<div class="banner sample"><b>Sample data.</b> These requests are examples. Replace them with your real UAT requests.</div>` : "")
+    + (S.snapshot ? `<div class="banner">Read-only view of the UAT tracker, last updated <b>${esc(S.snapshot)}</b>. Team members add and update requests in the <a href="https://claude.ai/artifact/EYSXW8RHKpX9UVsWc2LtT6" target="_blank" rel="noopener">team tracker</a>.</div>`
+       : S.readOnly ? `<div class="banner">You have view-only access. Figures update live as the team makes changes.</div>` : "");
+  $("#goGuide")?.addEventListener("click", e => { e.preventDefault(); setView("guide"); });
+  $("#hdrNew").hidden = S.readOnly || !S.db;
+  if (S.view === "overview") renderOverview(); else if (S.view === "register") renderRegister(); else renderGuide();
+}
+let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (S.view === "overview" && S.loaded.r) drawCharts(filtered()); }, 150); });
+
+bindFilters(); renderFilterOptions();
+$("#hdrNew").addEventListener("click", () => openDrawer(null));
+const h = (location.hash||"").slice(1); const lv = load("view","overview"); setView(["overview","register"].includes(h) ? h : (["overview","register"].includes(lv) ? lv : "overview"));
+document.querySelectorAll(".tabs button").forEach(b => b.addEventListener("click", () => store("view", b.dataset.tab)));
+
+(async () => {
+  if (window.__UAT_SNAPSHOT__) {
+    const snap = window.__UAT_SNAPSHOT__;
+    S.snapshot = snap.at; S.readOnly = true;
+    S.reqs = new Map(snap.requests.map(r => [r.id, r])); S.hist = snap.history;
+    S.settings = Object.assign({staleDays:7}, snap.settings || {});
+    S.loaded.r = S.loaded.h = true; rebuildHistIndex(); renderFilterOptions(); render(); return;
+  }
+  if (!window.claude || !window.claude.use) { $("#view-"+S.view).innerHTML = `<div class="card">Open this tracker from claude.ai while signed in to load the shared request data.</div>`; return; }
+  const [db, user, dl] = await Promise.all([claude.use("db"), claude.use("user"), claude.use("downloads")]);
+  S.db = db; S.user = user; S.downloads = dl;
+  if (!db) { $("#view-"+S.view).innerHTML = `<div class="card">The shared request data can't be loaded in this view. Open the tracker from claude.ai while signed in to your organization.</div>`; return; }
+  if (user) { try { S.me = await user.id(); const c = await user.can("data.write"); if (c === false) S.readOnly = true; } catch(e) {} }
+  db.collection("requests").onSnapshot(snap => {
+    S.reqs = new Map(snap.docs.map(d => { const v = d.data(); return [d.id, Object.assign({}, v, {id: d.id})]; }));
+    S.loaded.r = true; scheduleRender();
+  }, () => toast("Lost connection to the request data. Reload the page."));
+  db.collection("history").onSnapshot(snap => {
+    S.hist = snap.docs.map(d => Object.assign({}, d.data(), {_id: d.id})).filter(e => e.at && e.requestId);
+    S.loaded.h = true; rebuildHistIndex(); scheduleRender(); resolveNames();
+  }, () => {});
+  db.doc("config/settings").onSnapshot(d => { if (d.exists) { S.settings = Object.assign({staleDays:7}, d.data()); scheduleRender(); } }, () => {});
+})();
 })();
 </script>
-</body>
-</html>
+
+</body></html>
